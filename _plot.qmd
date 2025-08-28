@@ -1,0 +1,76 @@
+
+```{ojs}
+//| output: false
+plot_playfair_raw = Plot.plot({
+  width: 600,
+  height: 800,
+  style: {
+    backgroundColor: '#f7dda2',
+    color: 'black',
+  },
+  x: { label: "Année", domain: [d3.min(df, d => d.TIME_PERIOD), d3.max(df, d => d.TIME_PERIOD)]},
+  y: {
+    axis: "right",
+    label: "Ratio dette/PIB (%)",
+  },
+  marks: [
+    Plot.areaY(df, {
+      x: "TIME_PERIOD",
+      y2: "OBS_VALUE_NIVEAU",
+      y1: d => d3.min(df, d => d.OBS_VALUE_NIVEAU),
+      fill: "#91db84",
+      curve: "linear",
+      opacity: 0.8
+    }),
+    Plot.line(df, {
+      x: "TIME_PERIOD",
+      y: "OBS_VALUE_NIVEAU",
+      stroke: "darkred",
+      strokeWidth: 3.5,
+      curve: "linear"
+    }),
+    Plot.gridY({ strokeOpacity: 0.6 }),
+    Plot.gridX({ strokeOpacity: 0.6, interval: "1 year" }),
+
+    // --- évènements ---
+    Plot.text(
+      [{ TIME_PERIOD: new Date("2008-01-01"), OBS_VALUE_NIVEAU: d3.max(filtered, d => d.OBS_VALUE_NIVEAU) }],
+      {
+        x: (d) => d3.timeMonth.offset(d.TIME_PERIOD, -5),
+        y: (d) => d.OBS_VALUE_NIVEAU - 20,
+        text: () => "Crise financière",
+        rotate: -90,
+        dy: -20,
+        fontSize: 12,
+        fill: "black",
+        textAnchor: "end",
+        fontWeight: "bold"
+      }
+    ),
+    Plot.text(
+      [{ TIME_PERIOD: new Date("2020-01-01"), OBS_VALUE_NIVEAU: d3.max(filtered, d => d.OBS_VALUE_NIVEAU) }],
+      {
+        x: (d) => d3.timeMonth.offset(d.TIME_PERIOD, -5),
+        y: (d) => d.OBS_VALUE_NIVEAU - 20,
+        text: () => "Covid",
+        rotate: -90,
+        dy: -20,
+        fontSize: 12,
+        fill: "black",
+        textAnchor: "end",
+        fontWeight: "bold"
+      }
+    ),
+
+    // ton image
+    Plot.image(temp, {
+      x: "x",
+      y: "y",
+      src: "blob:https://linogaliana.static.observableusercontent.com/66a58e01-ab7f-4254-8bac-6a01aedc3c8d",
+      width: 200,
+      title: "Name"
+    })
+  ]
+})
+
+```

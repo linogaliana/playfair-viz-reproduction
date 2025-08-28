@@ -1,0 +1,42 @@
+
+```{ojs}
+filtered = df.filter(d =>
+  d.TIME_PERIOD >= yearZoom[0] && d.TIME_PERIOD < yearZoom[1]
+);
+```
+
+```{ojs}
+df = d3.json("https://api.insee.fr/melodi/data/DD_CNA_APU?REF_SECTOR=S13&STO=_DETNET_PPIB").then(data => {
+  const flattened = data.observations.map(obs => {
+    const dimensions = { ...obs.dimensions };
+
+    // Convert to Date object
+    dimensions.TIME_PERIOD = new Date(dimensions.TIME_PERIOD + "-01-01");
+
+    const measures = Object.fromEntries(
+      Object.entries(obs.measures ?? {}).map(([k, v]) => [k, v.value])
+    );
+
+    return {
+      ...dimensions,
+      ...measures
+    };
+  });
+
+  // ⬅️ Sort in ascending order of TIME_PERIOD
+  flattened.sort((a, b) => a.TIME_PERIOD - b.TIME_PERIOD);
+
+  console.table(flattened);
+  return flattened;
+});
+```
+
+
+
+```{ojs}
+temp = Array({
+  url: "blob:https://linogaliana.static.observableusercontent.com/66a58e01-ab7f-4254-8bac-6a01aedc3c8d",
+  x: d3.timeMonth.offset( d3.min(filtered, d => d.TIME_PERIOD), 100),
+  y: d3.max(filtered, d => d.OBS_VALUE_NIVEAU) - 10
+})
+```

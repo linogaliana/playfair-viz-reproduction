@@ -1,0 +1,133 @@
+```{ojs}
+function timeRange(start, end, options = {}) {
+  let {
+    interval = "day",
+    step = 1,
+    format = null,
+    label = null,
+    value = null
+  } = options;
+  let ts;
+  switch (interval.toLowerCase()) {
+    case "millisecond":
+      ts = d3.utcMilliseconds(start, end, step);
+      format = format || "%M:%S.%L";
+      break;
+    case "second":
+      ts = d3.utcSeconds(start, end, step);
+      format = format || "%H:%M:%S";
+      break;
+    case "minute":
+      ts = d3.utcMinutes(start, end, step);
+      format = format || "%H:%M";
+      break;
+    case "hour":
+      ts = d3.utcHours(start, end, step);
+      format = format || "%H:%M";
+      break;
+    case "day":
+      ts = d3.utcDays(start, end, step);
+      format = format || "%Y-%m-%d";
+      break;
+    case "week":
+      ts = d3.utcWeeks(start, end, step);
+      format = format || "%Y-%m-%d";
+      break;
+    case "month":
+      ts = d3.utcMonths(start, end, step);
+      format = format || "%b %Y";
+      break;
+    case "year":
+      ts = d3.utcYears(start, end, step);
+      format = format || "%Y";
+      break;
+    default:
+      throw Error(`Unknown time interval "${interval}" provided to timeRange`);
+  }
+
+  // Because we are dealing with Date objects rather than primitives, the value setting for initial
+  // selection needs to be matched against closest of the internally stored Dates rather than direct
+  // equality testing.
+  const findClosestDate = (targetDate) => {
+    if (!targetDate || ts.length === 0) {
+      return null;
+    }
+    let closestDate = ts[0];
+    let smallestDifference = Math.abs(ts[0] - targetDate);
+    for (const date of ts) {
+      const difference = Math.abs(date - targetDate);
+      if (difference < smallestDifference) {
+        smallestDifference = difference;
+        closestDate = date;
+      }
+    }
+    return closestDate;
+  };
+
+  let minSel, maxSel;
+  if (value && value.length === 2) {
+    minSel = findClosestDate(value[0]);
+    maxSel = findClosestDate(value[1]);
+  } else {
+    minSel = ts[0];
+    maxSel = ts.at(-1);
+  }
+
+  return offsetInterval(ts, {
+    value: [minSel, maxSel],
+    label: label,
+    format: ([a, b]) => htl.html`<span ${{
+      style: "display: flex; justify-content: space-between"
+    }}>
+      <span>${a.toLocaleString(undefined, {month: "long", year: "numeric"})}</span>
+      <span>${b.toLocaleString(undefined, {month: "long", year: "numeric"})}</span>
+    </span>`
+    })
+
+}
+```
+
+```{ojs}
+import {offsetInterval} from "@mootari/offset-slider"
+```
+
+
+```{ojs}
+html`
+<link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Patrick+Hand&family=Shadows+Into+Light&display=swap" rel="stylesheet">
+`
+```
+
+```{ojs}
+svg2rough = import("https://cdn.skypack.dev/svg2roughjs@3.0.1?min")
+```
+
+```{ojs}
+import {timeRange} from "@linogaliana/dataviz-bike-notebook"
+```
+
+```{ojs}
+makeRough = (svg, {
+  backgroundColor = "white",
+  fontFamily = "cursive",
+  fillStyle = "hachure",
+  roughness = 1.5,
+  bowing = 1,
+  randomize = true,
+  pencilFilter = true
+} = {}) => {
+  const S = Object.assign(
+    new svg2rough.Svg2Roughjs(document.createElement("svg")),
+    {
+      svg,
+      backgroundColor,
+      pencilFilter,
+      randomize,
+      fontFamily,
+      roughConfig: { bowing, roughness, fillStyle }
+    }
+  );
+  S.sketch();
+  return S.outputElement;
+}
+```

@@ -1,0 +1,22 @@
+---
+title: "playfair-reproduction"
+echo: false
+---
+
+```{ojs}
+makeRough(
+  plot_playfair_raw, {randomize: false, bowing: 0, rougness: 0, backgroundColor: "#f9edb1", fillStyle: "solid", fontFamily: "Patrick Hand"}
+)
+```
+
+
+{{< include "_data.qmd" >}}
+
+{{< include "_globals.qmd" >}}
+
+{{< include "_plot.qmd" >}}
+
+{{< include "_widgets.qmd" >}}
+
+
+

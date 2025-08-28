@@ -131,3 +131,42 @@ makeRough = (svg, {
   return S.outputElement;
 }
 ```
+
+
+```{ojs}
+viewof quartoThemeIsDark = {
+  const span = html`<span style="display: none;"></span>`;
+
+  function updateTheme() {
+    const isDark = document.body.classList.contains("quarto-dark");
+    span.value = isDark;
+    span.dispatchEvent(new CustomEvent("input"));
+  }
+
+  // Initial check
+  updateTheme();
+
+  // Observer les changements de classe sur <body>
+  const observer = new MutationObserver(() => updateTheme());
+
+  observer.observe(document.body, {
+    attributes: true,
+    attributeFilter: ["class"]
+  });
+
+  // Nettoyage si jamais nécessaire
+  span.remove = () => observer.disconnect();
+
+  return span;
+}
+
+```
+
+
+<!-----------
+Comme je trouve la manière dont le _New York Times_ gère l'interactivité de ses figures extrêmement bien pensée, j'ai essayé de reprendre leur logique avec le texte s'affichant en fonction du pointeur. J'ai trouvé sur [ce _notebook_](https://observablehq.com/@observablehq/plot-pointer-driven-marks) une reproduction de cette technique que j'ai adaptée à mes besoins.
+------------->
+
+```{ojs}
+import {pointerMX, renderMultipleText, customOverlapRender} from "@observablehq/plot-pointer-driven-marks"
+```

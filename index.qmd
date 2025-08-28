@@ -3,11 +3,125 @@ title: "playfair-reproduction"
 echo: false
 ---
 
+On s'amuse à reproduire la figure de Playfair (1789)
+
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
 ```{ojs}
 makeRough(
   plot_playfair_raw, {randomize: false, bowing: 0, rougness: 0, backgroundColor: "#f9edb1", fillStyle: "solid", fontFamily: "Patrick Hand"}
 )
 ```
+
+La version moderne sur données françaises
+
+:::
+
+::: {.column width="50%"}
+
+![](playfair-national-debt.png){height="500"}
+
+La version originale
+
+:::
+
+::::
+
+
+```{ojs}
+Plot.plot({
+    width: 670,
+    height: 330,
+    marginBottom: 38,
+    marginRight: 130,
+    style: "user-select: none; touch-action: none; max-width: 100%;",
+    title: html`<div style="font-family: var(--sans-serif); font-weight: 600;">${'Titre'}</div>`,
+    color: {
+      domain: ["red"]
+    },
+    x: {
+      domain: yearZoom,
+      grid: true
+    },
+    y: {
+      grid: true
+    },
+    marks: [
+      Plot.dot(
+        df,
+        pointerMX({
+          symbol: "triangle",
+          x: "TIME_PERIOD",
+          frameAnchor: "top",
+          atrest: "maxX",
+          fill: "black",
+          rotate: 180
+        })
+      ),
+
+      Plot.lineY(df, {
+        x: "TIME_PERIOD",
+        y: "OBS_VALUE_NIVEAU",
+        stroke: "red",
+        strokeWidth: 1,
+        curve: "natural",
+        opacity: 0.25
+      }),
+
+      Plot.lineY(
+        df,
+        pointerMX({
+          x: "TIME_PERIOD",
+          y: "OBS_VALUE_NIVEAU",
+          atrest: "maxX",
+          selector: "before",
+          z: "variable",
+          stroke: "variable",
+          curve: "natural",
+          strokeWidth: 3,
+          markerStart: true,
+        })
+      ),
+
+      Plot.text(
+        df,
+        pointerMX(
+          renderMultipleText({
+            x: "TIME_PERIOD",
+            y: "OBS_VALUE_NIVEAU",
+            atrest: "maxX",
+            channels: { z: "variable" },
+            fill: "variable",
+            selector: "eq",
+            fontWeight: "bold",
+            fontSize: 14,
+            text: (d) => "dette",
+            textAnchor: "end",
+            stroke: "white",
+            dx: 50,
+            render: customOverlapRender()
+          })
+        )
+      ),
+
+      Plot.text(
+        df,
+        pointerMX({
+          x: "TIME_PERIOD",
+          atrest: "maxX",
+          text: "ddd",
+          fill: "currentColor",
+          frameAnchor: "top",
+          dy: -15
+        })
+      )
+    ]
+  });
+```
+
 
 
 {{< include "_data.qmd" >}}

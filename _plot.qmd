@@ -2,8 +2,8 @@
 ```{ojs}
 //| output: false
 plot_playfair_raw = Plot.plot({
-  width: 600,
-  height: 800,
+  width: 350,
+  height: 500,
   style: {
     backgroundColor: '#f7dda2',
     color: 'black',
@@ -66,9 +66,9 @@ plot_playfair_raw = Plot.plot({
     Plot.image(temp, {
       x: "x",
       y: "y",
-      src: "blob:https://linogaliana.static.observableusercontent.com/66a58e01-ab7f-4254-8bac-6a01aedc3c8d",
-      width: 200,
-      title: "Name"
+      src: "https://minio.lab.sspcloud.fr/lgaliana/data/dataviz/chart_national_debt2.png",
+      width: 100,
+      title: "Title"
     })
   ]
 })

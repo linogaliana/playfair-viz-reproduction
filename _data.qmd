@@ -35,8 +35,8 @@ df = d3.json("https://api.insee.fr/melodi/data/DD_CNA_APU?REF_SECTOR=S13&STO=_DE
 
 ```{ojs}
 temp = Array({
-  url: "blob:https://linogaliana.static.observableusercontent.com/66a58e01-ab7f-4254-8bac-6a01aedc3c8d",
-  x: d3.timeMonth.offset( d3.min(filtered, d => d.TIME_PERIOD), 100),
+  url: "https://minio.lab.sspcloud.fr/lgaliana/dataviz/chart_national_debt2.png",
+  x: d3.timeMonth.offset( d3.min(filtered, d => d.TIME_PERIOD), 20),
   y: d3.max(filtered, d => d.OBS_VALUE_NIVEAU) - 10
 })
 ```

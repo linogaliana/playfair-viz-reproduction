@@ -183,11 +183,9 @@ et récupérables sous forme de JSON depuis l'URL [https://api.insee.fr/melodi/d
 
 Le code {{< fa brands js-square >}} de préparation de données est disponible ci-dessous. L'ensemble du code pour produire les visualisations est disponible sur [{{< fa brands github >}} `linogaliana/playfair-viz-reproduction` {{< fa arrow-up-right-from-square >}}](https://github.com/linogaliana/playfair-viz-reproduction){target="_blank"}
 
+
 {{< include "_data.qmd" >}}
-
 {{< include "_globals.qmd" >}}
-
 {{< include "_plot.qmd" >}}
-
 {{< include "_widgets.qmd" >}}
 

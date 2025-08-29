@@ -14,7 +14,7 @@ df = d3.json("https://api.insee.fr/melodi/data/DD_CNA_APU?REF_SECTOR=S13&STO=_DE
     const dimensions = { ...obs.dimensions };
 
     // Convert to Date object
-    dimensions.TIME_PERIOD = new Date(dimensions.TIME_PERIOD + "-01-01");
+    dimensions.TIME_PERIOD = new Date(dimensions.TIME_PERIOD + "-06-01");
 
     const measures = Object.fromEntries(
       Object.entries(obs.measures ?? {}).map(([k, v]) => [k, v.value])

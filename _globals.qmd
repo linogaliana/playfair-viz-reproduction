@@ -79,8 +79,8 @@ function timeRange(start, end, options = {}) {
     format: ([a, b]) => htl.html`<span ${{
       style: "display: flex; justify-content: space-between"
     }}>
-      <span>${a.toLocaleString(undefined, {month: "long", year: "numeric"})}</span>
-      <span>${b.toLocaleString(undefined, {month: "long", year: "numeric"})}</span>
+      <span>${a.toLocaleString(undefined, {year: "numeric"})}</span>
+      <span>${b.toLocaleString(undefined, {year: "numeric"})}</span>
     </span>`
     })
 

@@ -1,0 +1,24 @@
+/* css styles */
+.figures-playfair {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+.figures-playfair > div {
+    flex: 1 1 400px; /* minimum 400px, puis s’adapte */
+  }
+
+@media (max-width: 900px) {
+    .figures-playfair {
+      flex-direction: column;
+    }
+  }
+
+g.text-container text {
+    fill: black !important;
+}
+
+g[filter="url(#pencilTextureFilter)"] path[stroke*="255, 255, 255"] {
+    stroke: rgba(0,0,0,0.2) !important;
+}
+

@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.34">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>playfair-reproduction</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-c8ad9e5dbd60b7b70b38521ab19b7da4.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-befe23ebd2f54d8af2c8a89d1a1611f1.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-c8ad9e5dbd60b7b70b38521ab19b7da4.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-c4f3a08e70260739b56dd0d8f062e40f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-66ccd01e299dadd02940aa90e772e5b4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-c4f3a08e70260739b56dd0d8f062e40f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/quarto-contrib/fontawesome6-1.2.0/all.min.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/fontawesome6-1.2.0/latex-fontsize.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script type="module" src="site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const queryPrefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    const darkModeDefault = queryPrefersDark.matches;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    queryPrefersDark.addEventListener("change", e => {
+      if(window.localStorage.getItem("quarto-color-scheme") !== null)
+        return;
+      const alternate = e.matches
+      toggleColorMode(alternate);
+      localAlternateSentinel = e.matches ? 'alternate' : 'default'; // this is used alongside local storage!
+      toggleGiscusIfUsed(alternate, darkModeDefault);
+    });
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+        <div class="quarto-navbar-tools tools-end">
+    <a href="https://github.com/linogaliana/playfair-viz-reproduction.git" title="Code source sur GitHub" class="quarto-navigation-tool px-1" aria-label="Code source sur GitHub"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#données-et-définitions-conceptuelles" id="toc-données-et-définitions-conceptuelles" class="nav-link active" data-scroll-target="#données-et-définitions-conceptuelles">Données et définitions conceptuelles</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">playfair-reproduction</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Il est beaucoup question de dette publique actuellement. Il se trouve que j’ai récemment découvert dans le cours de Stanislas Dehaene au collège de France sur la <a href="https://www.college-de-france.fr/fr/agenda/cours/la-perception-des-graphiques-un-nouvel-exemple-de-recyclage-neuronal/origine-et-evolution-des-graphiques" target="_blank">perception des graphiques <i class="fa-solid fa-arrow-up-right-from-square" aria-label="arrow-up-right-from-square"></i></a> qu’une des premières représentations graphiques modernes, qu’on doit à <strong><a href="https://fr.wikipedia.org/wiki/William_Playfair" target="_blank">William Playfair <i class="fa-solid fa-arrow-up-right-from-square" aria-label="arrow-up-right-from-square"></i></a></strong> en 1787, représentait justement l’évolution de la dette (anglaise) au cours du temps.</p>
+<p>J’avais donc envie de m’amuser à rejouer cette figure historique sur les données françaises récentes (détails sur celles-ci plus bas). Et puis ensuite, tout de même, de faire une représentation qui bénéficie de presque 250 ans de recul sur la perception des graphiques et permettant de mieux communiquer la “vérité” (une notion qui elle-même mérite discussion) des données. Les enjeux conceptuels et des précautions d’interprétation sont proposés plus bas.</p>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb1" data-startfrom="11" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 10;"><span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Crée le conteneur</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> container <span class="op">=</span> <span class="fu">html</span><span class="vs">`&lt;div class="figures-playfair"&gt;&lt;/div&gt;`</span><span class="op">;</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Petite fonction utilitaire pour (re)faire la mise en page</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> mq <span class="op">=</span> <span class="bu">window</span><span class="op">.</span><span class="fu">matchMedia</span>(<span class="st">"(min-width: 900px)"</span>)<span class="op">;</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="kw">function</span> <span class="fu">applyLayout</span>() {</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    container<span class="op">.</span><span class="at">style</span><span class="op">.</span><span class="at">display</span> <span class="op">=</span> <span class="st">"grid"</span><span class="op">;</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    container<span class="op">.</span><span class="at">style</span><span class="op">.</span><span class="at">gridTemplateColumns</span> <span class="op">=</span> mq<span class="op">.</span><span class="at">matches</span> <span class="op">?</span> <span class="st">"1fr 1fr"</span> <span class="op">:</span> <span class="st">"1fr"</span><span class="op">;</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    container<span class="op">.</span><span class="at">style</span><span class="op">.</span><span class="at">gap</span> <span class="op">=</span> <span class="st">"16px"</span><span class="op">;</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    container<span class="op">.</span><span class="at">style</span><span class="op">.</span><span class="at">alignItems</span> <span class="op">=</span> <span class="st">"start"</span><span class="op">;</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Construire les deux panneaux</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> left <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">createElement</span>(<span class="st">"div"</span>)<span class="op">;</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  left<span class="op">.</span><span class="fu">appendChild</span>(<span class="fu">html</span><span class="vs">`&lt;h4&gt;La dette française, à la Playfair&lt;/h4&gt;`</span>)<span class="op">;</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>  left<span class="op">.</span><span class="fu">appendChild</span>(</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">makeRough</span>(</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>      plot_playfair_raw<span class="op">,</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>      { <span class="dt">randomize</span><span class="op">:</span> <span class="kw">false</span><span class="op">,</span> <span class="dt">bowing</span><span class="op">:</span> <span class="dv">0</span><span class="op">,</span> <span class="dt">roughness</span><span class="op">:</span> <span class="dv">0</span><span class="op">,</span> <span class="dt">backgroundColor</span><span class="op">:</span> <span class="st">"#fbe9d3"</span><span class="op">,</span> <span class="dt">fillStyle</span><span class="op">:</span> <span class="st">"solid"</span><span class="op">,</span> <span class="dt">fontFamily</span><span class="op">:</span> <span class="st">"Patrick Hand"</span> }</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>  )<span class="op">;</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> right <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">createElement</span>(<span class="st">"div"</span>)<span class="op">;</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>  right<span class="op">.</span><span class="fu">appendChild</span>(<span class="fu">html</span><span class="vs">`&lt;h4&gt;Version originale&lt;/h4&gt;`</span>)<span class="op">;</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> img <span class="op">=</span> <span class="bu">Object</span><span class="op">.</span><span class="fu">assign</span>(<span class="kw">new</span> <span class="fu">Image</span>()<span class="op">,</span> { <span class="dt">src</span><span class="op">:</span> <span class="st">"playfair-national-debt.png"</span> })<span class="op">;</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Image responsive</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>  img<span class="op">.</span><span class="at">style</span><span class="op">.</span><span class="at">maxWidth</span> <span class="op">=</span> <span class="st">"100%"</span><span class="op">;</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>  img<span class="op">.</span><span class="at">style</span><span class="op">.</span><span class="at">height</span> <span class="op">=</span> <span class="st">"auto"</span><span class="op">;</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>  right<span class="op">.</span><span class="fu">appendChild</span>(img)<span class="op">;</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>  container<span class="op">.</span><span class="fu">append</span>(left<span class="op">,</span> right)<span class="op">;</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Applique la mise en page initiale et écoute les changements</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">applyLayout</span>()<span class="op">;</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Compat ancien / nouveau navigateur</span></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (mq<span class="op">.</span><span class="at">addEventListener</span>) mq<span class="op">.</span><span class="fu">addEventListener</span>(<span class="st">"change"</span><span class="op">,</span> applyLayout)<span class="op">;</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> mq<span class="op">.</span><span class="fu">addListener</span>(applyLayout)<span class="op">;</span></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Sécuriser avec un listener de resize (au cas où)</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> onResize <span class="op">=</span> () <span class="kw">=&gt;</span> <span class="fu">applyLayout</span>()<span class="op">;</span></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>  <span class="bu">window</span><span class="op">.</span><span class="fu">addEventListener</span>(<span class="st">"resize"</span><span class="op">,</span> onResize)<span class="op">;</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Nettoyage si le DOM est détaché</span></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>  container<span class="op">.</span><span class="fu">addEventListener</span>(<span class="st">"DOMNodeRemoved"</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (mq<span class="op">.</span><span class="at">removeEventListener</span>) mq<span class="op">.</span><span class="fu">removeEventListener</span>(<span class="st">"change"</span><span class="op">,</span> applyLayout)<span class="op">;</span></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> mq<span class="op">.</span><span class="fu">removeListener</span>(applyLayout)<span class="op">;</span></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>    <span class="bu">window</span><span class="op">.</span><span class="fu">removeEventListener</span>(<span class="st">"resize"</span><span class="op">,</span> onResize)<span class="op">;</span></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span> { <span class="dt">once</span><span class="op">:</span> <span class="kw">true</span> })<span class="op">;</span></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> container<span class="op">;</span></span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-1" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p>Parmi les principaux problèmes de la représentation ci-dessus, on peut noter l’axe à droite et le point de départ de l’axe des ordonnées. Sur ce dernier sujet, il est plus juste de partir de 0 qui fournit, en quelques sorte, un idéal (un Etat sans endettement) permettant d’évaluer plus justement les valeurs observées.</p>
+<p>On peut aussi tirer parti de l’interactivité du navigateur web pour rendre plus ergonomique la visualisation. Piur améliorer la contextualisation de ces statistiques, des annotations sur certaines périodes clés ne seraient pas inutiles. Mais comme elles peuvent alourdir la visualisation sans réflexion approfondie sur l’ergonomie de la figure, j’ai préféré ne pas en mettre.</p>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb2" data-startfrom="72" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 71;"><span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a><span class="fu">html</span><span class="vs">`</span></span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a><span class="sc">${</span>viewof yearZoom<span class="sc">}</span></span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a><span class="sc">${</span>viewof plot_modern<span class="sc">}</span></span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a><span class="vs">`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-2" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb3" data-startfrom="80" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 79;"><span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a>viewof plot_modern <span class="op">=</span> Plot<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a>  <span class="dt">width</span><span class="op">:</span> <span class="dv">670</span><span class="op">,</span></span>
+<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a>  <span class="dt">height</span><span class="op">:</span> <span class="dv">330</span><span class="op">,</span></span>
+<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marginBottom</span><span class="op">:</span> <span class="dv">38</span><span class="op">,</span></span>
+<span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marginRight</span><span class="op">:</span> <span class="dv">130</span><span class="op">,</span></span>
+<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a>  <span class="dt">style</span><span class="op">:</span> <span class="st">"user-select: none; touch-action: none; max-width: 100%;"</span><span class="op">,</span></span>
+<span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a>  <span class="dt">title</span><span class="op">:</span> <span class="fu">html</span><span class="vs">`&lt;div style="font-family: var(--sans-serif); font-weight: 600;"&gt;</span><span class="sc">${</span><span class="st">'La dette des administrations publiques françaises'</span><span class="sc">}</span><span class="vs">&lt;/div&gt;`</span><span class="op">,</span></span>
+<span id="cb3-87"><a href="#cb3-87" aria-hidden="true" tabindex="-1"></a>  <span class="dt">caption</span><span class="op">:</span> <span class="fu">md</span><span class="vs">`Cette figure représente la [dette au sens de Maastricht](https://www.insee.fr/fr/statistiques/8574703?sommaire=8574832#documentation) des administrations publiques françaises, rapportée au PIB. Les seuils de 60% (critère de convergence de Maastricht) et de 100% (dette égale au PIB) ont été rapportés.&lt;br&gt;Source: Insee, [comptes nationaux annuels](https://www.insee.fr/fr/statistiques/8574703?sommaire=8574832#documentation)`</span><span class="op">,</span></span>
+<span id="cb3-88"><a href="#cb3-88" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> { <span class="dt">domain</span><span class="op">:</span> yearZoom<span class="op">,</span> <span class="dt">grid</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Année"</span> }<span class="op">,</span></span>
+<span id="cb3-89"><a href="#cb3-89" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> {</span>
+<span id="cb3-90"><a href="#cb3-90" aria-hidden="true" tabindex="-1"></a>    <span class="dt">grid</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [<span class="dv">0</span><span class="op">,</span> d3<span class="op">.</span><span class="fu">max</span>(df<span class="op">,</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">OBS_VALUE_NIVEAU</span>)<span class="op">+</span><span class="dv">10</span>]<span class="op">,</span></span>
+<span id="cb3-91"><a href="#cb3-91" aria-hidden="true" tabindex="-1"></a>    <span class="dt">label</span><span class="op">:</span> <span class="st">"Ratio dette/PIB (%)"</span></span>
+<span id="cb3-92"><a href="#cb3-92" aria-hidden="true" tabindex="-1"></a>    }<span class="op">,</span></span>
+<span id="cb3-93"><a href="#cb3-93" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
+<span id="cb3-94"><a href="#cb3-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-95"><a href="#cb3-95" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">ruleY</span>(</span>
+<span id="cb3-96"><a href="#cb3-96" aria-hidden="true" tabindex="-1"></a>      [<span class="dv">60</span><span class="op">,</span> <span class="dv">100</span>]<span class="op">,</span></span>
+<span id="cb3-97"><a href="#cb3-97" aria-hidden="true" tabindex="-1"></a>      {<span class="dt">strokeDasharray</span><span class="op">:</span> <span class="st">"4,2"</span>}</span>
+<span id="cb3-98"><a href="#cb3-98" aria-hidden="true" tabindex="-1"></a>    )<span class="op">,</span></span>
+<span id="cb3-99"><a href="#cb3-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-100"><a href="#cb3-100" aria-hidden="true" tabindex="-1"></a>    <span class="co">// petit triangle indicateur</span></span>
+<span id="cb3-101"><a href="#cb3-101" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">dot</span>(</span>
+<span id="cb3-102"><a href="#cb3-102" aria-hidden="true" tabindex="-1"></a>      df<span class="op">,</span></span>
+<span id="cb3-103"><a href="#cb3-103" aria-hidden="true" tabindex="-1"></a>      <span class="fu">pointerMX</span>({</span>
+<span id="cb3-104"><a href="#cb3-104" aria-hidden="true" tabindex="-1"></a>        <span class="dt">symbol</span><span class="op">:</span> <span class="st">"triangle"</span><span class="op">,</span></span>
+<span id="cb3-105"><a href="#cb3-105" aria-hidden="true" tabindex="-1"></a>        <span class="dt">x</span><span class="op">:</span> <span class="st">"TIME_PERIOD"</span><span class="op">,</span></span>
+<span id="cb3-106"><a href="#cb3-106" aria-hidden="true" tabindex="-1"></a>        <span class="dt">frameAnchor</span><span class="op">:</span> <span class="st">"top"</span><span class="op">,</span></span>
+<span id="cb3-107"><a href="#cb3-107" aria-hidden="true" tabindex="-1"></a>        <span class="dt">atrest</span><span class="op">:</span> <span class="st">"maxX"</span><span class="op">,</span></span>
+<span id="cb3-108"><a href="#cb3-108" aria-hidden="true" tabindex="-1"></a>        <span class="dt">fill</span><span class="op">:</span> <span class="st">"#c81025"</span><span class="op">,</span></span>
+<span id="cb3-109"><a href="#cb3-109" aria-hidden="true" tabindex="-1"></a>        <span class="dt">rotate</span><span class="op">:</span> <span class="dv">180</span></span>
+<span id="cb3-110"><a href="#cb3-110" aria-hidden="true" tabindex="-1"></a>      })</span>
+<span id="cb3-111"><a href="#cb3-111" aria-hidden="true" tabindex="-1"></a>    )<span class="op">,</span></span>
+<span id="cb3-112"><a href="#cb3-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-113"><a href="#cb3-113" aria-hidden="true" tabindex="-1"></a>    <span class="co">// courbe fine en arrière-plan</span></span>
+<span id="cb3-114"><a href="#cb3-114" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">lineY</span>(df<span class="op">,</span> {</span>
+<span id="cb3-115"><a href="#cb3-115" aria-hidden="true" tabindex="-1"></a>      <span class="dt">x</span><span class="op">:</span> <span class="st">"TIME_PERIOD"</span><span class="op">,</span></span>
+<span id="cb3-116"><a href="#cb3-116" aria-hidden="true" tabindex="-1"></a>      <span class="dt">y</span><span class="op">:</span> <span class="st">"OBS_VALUE_NIVEAU"</span><span class="op">,</span></span>
+<span id="cb3-117"><a href="#cb3-117" aria-hidden="true" tabindex="-1"></a>      <span class="dt">stroke</span><span class="op">:</span> <span class="st">"red"</span><span class="op">,</span></span>
+<span id="cb3-118"><a href="#cb3-118" aria-hidden="true" tabindex="-1"></a>      <span class="dt">strokeWidth</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span></span>
+<span id="cb3-119"><a href="#cb3-119" aria-hidden="true" tabindex="-1"></a>      <span class="dt">curve</span><span class="op">:</span> <span class="st">"natural"</span><span class="op">,</span></span>
+<span id="cb3-120"><a href="#cb3-120" aria-hidden="true" tabindex="-1"></a>      <span class="dt">opacity</span><span class="op">:</span> <span class="fl">0.250</span></span>
+<span id="cb3-121"><a href="#cb3-121" aria-hidden="true" tabindex="-1"></a>    })<span class="op">,</span></span>
+<span id="cb3-122"><a href="#cb3-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-123"><a href="#cb3-123" aria-hidden="true" tabindex="-1"></a>    <span class="co">// courbe principale "mise en avant"</span></span>
+<span id="cb3-124"><a href="#cb3-124" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">lineY</span>(</span>
+<span id="cb3-125"><a href="#cb3-125" aria-hidden="true" tabindex="-1"></a>      df<span class="op">,</span></span>
+<span id="cb3-126"><a href="#cb3-126" aria-hidden="true" tabindex="-1"></a>      <span class="fu">pointerMX</span>({</span>
+<span id="cb3-127"><a href="#cb3-127" aria-hidden="true" tabindex="-1"></a>        <span class="dt">x</span><span class="op">:</span> <span class="st">"TIME_PERIOD"</span><span class="op">,</span></span>
+<span id="cb3-128"><a href="#cb3-128" aria-hidden="true" tabindex="-1"></a>        <span class="dt">y</span><span class="op">:</span> <span class="st">"OBS_VALUE_NIVEAU"</span><span class="op">,</span></span>
+<span id="cb3-129"><a href="#cb3-129" aria-hidden="true" tabindex="-1"></a>        <span class="dt">atrest</span><span class="op">:</span> <span class="st">"maxX"</span><span class="op">,</span></span>
+<span id="cb3-130"><a href="#cb3-130" aria-hidden="true" tabindex="-1"></a>        <span class="dt">selector</span><span class="op">:</span> <span class="st">"before"</span><span class="op">,</span></span>
+<span id="cb3-131"><a href="#cb3-131" aria-hidden="true" tabindex="-1"></a>        <span class="dt">stroke</span><span class="op">:</span> <span class="st">"#c81025"</span><span class="op">,</span></span>
+<span id="cb3-132"><a href="#cb3-132" aria-hidden="true" tabindex="-1"></a>        <span class="dt">curve</span><span class="op">:</span> <span class="st">"natural"</span><span class="op">,</span></span>
+<span id="cb3-133"><a href="#cb3-133" aria-hidden="true" tabindex="-1"></a>        <span class="dt">strokeWidth</span><span class="op">:</span> <span class="dv">3</span><span class="op">,</span></span>
+<span id="cb3-134"><a href="#cb3-134" aria-hidden="true" tabindex="-1"></a>        <span class="dt">markerStart</span><span class="op">:</span> <span class="kw">true</span></span>
+<span id="cb3-135"><a href="#cb3-135" aria-hidden="true" tabindex="-1"></a>      })</span>
+<span id="cb3-136"><a href="#cb3-136" aria-hidden="true" tabindex="-1"></a>    )<span class="op">,</span></span>
+<span id="cb3-137"><a href="#cb3-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-138"><a href="#cb3-138" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-139"><a href="#cb3-139" aria-hidden="true" tabindex="-1"></a>    <span class="co">// annotation du nom de la série (fixe : "Dette")</span></span>
+<span id="cb3-140"><a href="#cb3-140" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">text</span>(</span>
+<span id="cb3-141"><a href="#cb3-141" aria-hidden="true" tabindex="-1"></a>      df<span class="op">,</span></span>
+<span id="cb3-142"><a href="#cb3-142" aria-hidden="true" tabindex="-1"></a>      <span class="fu">pointerMX</span>({</span>
+<span id="cb3-143"><a href="#cb3-143" aria-hidden="true" tabindex="-1"></a>        <span class="dt">x</span><span class="op">:</span> <span class="st">"TIME_PERIOD"</span><span class="op">,</span></span>
+<span id="cb3-144"><a href="#cb3-144" aria-hidden="true" tabindex="-1"></a>        <span class="dt">y</span><span class="op">:</span> <span class="st">"OBS_VALUE_NIVEAU"</span><span class="op">,</span></span>
+<span id="cb3-145"><a href="#cb3-145" aria-hidden="true" tabindex="-1"></a>        <span class="dt">atrest</span><span class="op">:</span> <span class="st">"maxX"</span><span class="op">,</span></span>
+<span id="cb3-146"><a href="#cb3-146" aria-hidden="true" tabindex="-1"></a>        <span class="dt">selector</span><span class="op">:</span> <span class="st">"eq"</span><span class="op">,</span></span>
+<span id="cb3-147"><a href="#cb3-147" aria-hidden="true" tabindex="-1"></a>        <span class="dt">fontWeight</span><span class="op">:</span> <span class="st">"bold"</span><span class="op">,</span></span>
+<span id="cb3-148"><a href="#cb3-148" aria-hidden="true" tabindex="-1"></a>        <span class="dt">text</span><span class="op">:</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">OBS_VALUE_NIVEAU</span><span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">1</span>) <span class="op">+</span> <span class="st">" %"</span><span class="op">,</span></span>
+<span id="cb3-149"><a href="#cb3-149" aria-hidden="true" tabindex="-1"></a>        <span class="dt">fontSize</span><span class="op">:</span> <span class="dv">14</span><span class="op">,</span></span>
+<span id="cb3-150"><a href="#cb3-150" aria-hidden="true" tabindex="-1"></a>        <span class="dt">textAnchor</span><span class="op">:</span> <span class="st">"end"</span><span class="op">,</span></span>
+<span id="cb3-151"><a href="#cb3-151" aria-hidden="true" tabindex="-1"></a>        <span class="dt">dx</span><span class="op">:</span> <span class="dv">50</span><span class="op">,</span></span>
+<span id="cb3-152"><a href="#cb3-152" aria-hidden="true" tabindex="-1"></a>        <span class="dt">stroke</span><span class="op">:</span> <span class="st">"white"</span><span class="op">,</span></span>
+<span id="cb3-153"><a href="#cb3-153" aria-hidden="true" tabindex="-1"></a>        <span class="dt">fill</span><span class="op">:</span> <span class="st">"#c81025"</span></span>
+<span id="cb3-154"><a href="#cb3-154" aria-hidden="true" tabindex="-1"></a>      })</span>
+<span id="cb3-155"><a href="#cb3-155" aria-hidden="true" tabindex="-1"></a>    )<span class="op">,</span></span>
+<span id="cb3-156"><a href="#cb3-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-157"><a href="#cb3-157" aria-hidden="true" tabindex="-1"></a>    <span class="co">// annotation de valeur dynamique</span></span>
+<span id="cb3-158"><a href="#cb3-158" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">text</span>(</span>
+<span id="cb3-159"><a href="#cb3-159" aria-hidden="true" tabindex="-1"></a>      df<span class="op">,</span></span>
+<span id="cb3-160"><a href="#cb3-160" aria-hidden="true" tabindex="-1"></a>      <span class="fu">pointerMX</span>({</span>
+<span id="cb3-161"><a href="#cb3-161" aria-hidden="true" tabindex="-1"></a>        <span class="dt">x</span><span class="op">:</span> <span class="st">"TIME_PERIOD"</span><span class="op">,</span></span>
+<span id="cb3-162"><a href="#cb3-162" aria-hidden="true" tabindex="-1"></a>        <span class="dt">y</span><span class="op">:</span> <span class="st">"OBS_VALUE_NIVEAU"</span><span class="op">,</span></span>
+<span id="cb3-163"><a href="#cb3-163" aria-hidden="true" tabindex="-1"></a>        <span class="dt">atrest</span><span class="op">:</span> <span class="st">"maxX"</span><span class="op">,</span></span>
+<span id="cb3-164"><a href="#cb3-164" aria-hidden="true" tabindex="-1"></a>        <span class="dt">text</span><span class="op">:</span> (d) <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">TIME_PERIOD</span><span class="op">.</span><span class="fu">toLocaleString</span>(<span class="kw">undefined</span><span class="op">,</span> {<span class="dt">year</span><span class="op">:</span> <span class="st">"numeric"</span>})<span class="op">,</span></span>
+<span id="cb3-165"><a href="#cb3-165" aria-hidden="true" tabindex="-1"></a>        <span class="dt">fill</span><span class="op">:</span> <span class="st">"currentColor"</span><span class="op">,</span></span>
+<span id="cb3-166"><a href="#cb3-166" aria-hidden="true" tabindex="-1"></a>        <span class="dt">frameAnchor</span><span class="op">:</span> <span class="st">"top"</span><span class="op">,</span></span>
+<span id="cb3-167"><a href="#cb3-167" aria-hidden="true" tabindex="-1"></a>        <span class="dt">dy</span><span class="op">:</span> <span class="op">-</span><span class="dv">15</span></span>
+<span id="cb3-168"><a href="#cb3-168" aria-hidden="true" tabindex="-1"></a>      })</span>
+<span id="cb3-169"><a href="#cb3-169" aria-hidden="true" tabindex="-1"></a>    )<span class="op">,</span></span>
+<span id="cb3-170"><a href="#cb3-170" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-171"><a href="#cb3-171" aria-hidden="true" tabindex="-1"></a>  ]</span>
+<span id="cb3-172"><a href="#cb3-172" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-3" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<section id="données-et-définitions-conceptuelles" class="level2">
+<h2 class="anchored" data-anchor-id="données-et-définitions-conceptuelles">Données et définitions conceptuelles</h2>
+<p>Ces graphiques s’appuient sur les comptes nationaux - une représentation synthétique de la structure de l’économie française - publiés par l’Insee. Le concept retenu est celui de la dette au sens de Maastricht. Son périmètre est ici celui des administrations publiques (les APU dans le jargon de la comptabilité nationale) qui prend en compte les passifs de l’État, des organismes divers d’administration centrale, des administrations publiques locales et des administrations de sécurité sociale. Le périmètre des engagements de l’Etat intégrés dans la définition de la dette au sens de Maastricht sont proposés sur le <a href="https://www.insee.fr/fr/statistiques/8574703?sommaire=8574832#consulter" target="_blank">site de l’Insee <i class="fa-solid fa-arrow-up-right-from-square" aria-label="arrow-up-right-from-square"></i></a>.</p>
+<p>Ces données ont été récupérées par le biais de l’API Melodi de l’Insee qui vise à simplifier la récupération de certains jeux de données - notamment ceux issus de la comptabilité nationale - de l’Insee. Les données en question sont consultables sur <a href="https://catalogue-donnees.insee.fr/fr/explorateur/DD_CNA_APU" target="_blank">catalogue-donnees.insee.fr/fr/explorateur/DD_CNA_APU <i class="fa-solid fa-arrow-up-right-from-square" aria-label="arrow-up-right-from-square"></i></a> et récupérables sous forme de JSON depuis l’URL <a href="https://api.insee.fr/melodi/data/DD_CNA_APU?REF_SECTOR=S13&amp;STO=_DETNET_PPIB" target="_blank">https://api.insee.fr/melodi/data/DD_CNA_APU?REF_SECTOR=S13&amp;STO=_DETNET_PPIB</a>.</p>
+<p>Le code <i class="fa-brands fa-js-square" aria-label="js-square"></i> de préparation de données est disponible ci-dessous. L’ensemble du code pour produire les visualisations est disponible sur <a href="https://github.com/linogaliana/playfair-viz-reproduction" target="_blank"><i class="fa-brands fa-github" aria-label="github"></i> <code>linogaliana/playfair-viz-reproduction</code> <i class="fa-solid fa-arrow-up-right-from-square" aria-label="arrow-up-right-from-square"></i></a></p>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb4" data-startfrom="-1" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line -2;"><span id="cb4--1"><a href="#cb4--1" aria-hidden="true" tabindex="-1"></a>filtered <span class="op">=</span> df<span class="op">.</span><span class="fu">filter</span>(d <span class="kw">=&gt;</span></span>
+<span id="cb4-0"><a href="#cb4-0" aria-hidden="true" tabindex="-1"></a>  d<span class="op">.</span><span class="at">TIME_PERIOD</span> <span class="op">&gt;=</span> yearZoom[<span class="dv">0</span>] <span class="op">&amp;&amp;</span> d<span class="op">.</span><span class="at">TIME_PERIOD</span> <span class="op">&lt;</span> yearZoom[<span class="dv">1</span>]</span>
+<span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-4" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Voir le code (Javascript) de récupération des données</summary>
+<div class="sourceCode cell-code" id="cb5" data-startfrom="2" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 1;"><span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> d3<span class="op">.</span><span class="fu">json</span>(<span class="st">"https://api.insee.fr/melodi/data/DD_CNA_APU?REF_SECTOR=S13&amp;STO=_DETNET_PPIB"</span>)<span class="op">.</span><span class="fu">then</span>(data <span class="kw">=&gt;</span> {</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> flattened <span class="op">=</span> data<span class="op">.</span><span class="at">observations</span><span class="op">.</span><span class="fu">map</span>(obs <span class="kw">=&gt;</span> {</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> dimensions <span class="op">=</span> { <span class="op">...</span>obs<span class="op">.</span><span class="at">dimensions</span> }<span class="op">;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Convert to Date object</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    dimensions<span class="op">.</span><span class="at">TIME_PERIOD</span> <span class="op">=</span> <span class="kw">new</span> <span class="bu">Date</span>(dimensions<span class="op">.</span><span class="at">TIME_PERIOD</span> <span class="op">+</span> <span class="st">"-06-01"</span>)<span class="op">;</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> measures <span class="op">=</span> <span class="bu">Object</span><span class="op">.</span><span class="fu">fromEntries</span>(</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>      <span class="bu">Object</span><span class="op">.</span><span class="fu">entries</span>(obs<span class="op">.</span><span class="at">measures</span> <span class="op">??</span> {})<span class="op">.</span><span class="fu">map</span>(([k<span class="op">,</span> v]) <span class="kw">=&gt;</span> [k<span class="op">,</span> v<span class="op">.</span><span class="at">value</span>])</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    )<span class="op">;</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>      <span class="op">...</span>dimensions<span class="op">,</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>      <span class="op">...</span>measures</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    }<span class="op">;</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ⬅️ Sort in ascending order of TIME_PERIOD</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  flattened<span class="op">.</span><span class="fu">sort</span>((a<span class="op">,</span> b) <span class="kw">=&gt;</span> a<span class="op">.</span><span class="at">TIME_PERIOD</span> <span class="op">-</span> b<span class="op">.</span><span class="at">TIME_PERIOD</span>)<span class="op">;</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">table</span>(flattened)<span class="op">;</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> flattened<span class="op">;</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-5" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb6" data-startfrom="-1" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line -2;"><span id="cb6--1"><a href="#cb6--1" aria-hidden="true" tabindex="-1"></a>temp <span class="op">=</span> <span class="bu">Array</span>({</span>
+<span id="cb6-0"><a href="#cb6-0" aria-hidden="true" tabindex="-1"></a>  <span class="dt">url</span><span class="op">:</span> <span class="st">"https://minio.lab.sspcloud.fr/lgaliana/data/dataviz/chart_national_debt2.png"</span><span class="op">,</span></span>
+<span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> d3<span class="op">.</span><span class="at">timeMonth</span><span class="op">.</span><span class="fu">offset</span>( d3<span class="op">.</span><span class="fu">min</span>(filtered<span class="op">,</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">TIME_PERIOD</span>)<span class="op">,</span> <span class="op">-</span><span class="dv">150</span>)<span class="op">,</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> d3<span class="op">.</span><span class="fu">max</span>(filtered<span class="op">,</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">OBS_VALUE_NIVEAU</span>) <span class="op">-</span> <span class="dv">8</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-6" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb7" data-startfrom="-1" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line -2;"><span id="cb7--1"><a href="#cb7--1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">timeRange</span>(start<span class="op">,</span> end<span class="op">,</span> options <span class="op">=</span> {}) {</span>
+<span id="cb7-0"><a href="#cb7-0" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> {</span>
+<span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>    interval <span class="op">=</span> <span class="st">"day"</span><span class="op">,</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    step <span class="op">=</span> <span class="dv">1</span><span class="op">,</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    format <span class="op">=</span> <span class="kw">null</span><span class="op">,</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    label <span class="op">=</span> <span class="kw">null</span><span class="op">,</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    value <span class="op">=</span> <span class="kw">null</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  } <span class="op">=</span> options<span class="op">;</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> ts<span class="op">;</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">switch</span> (interval<span class="op">.</span><span class="fu">toLowerCase</span>()) {</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="st">"millisecond"</span><span class="op">:</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>      ts <span class="op">=</span> d3<span class="op">.</span><span class="fu">utcMilliseconds</span>(start<span class="op">,</span> end<span class="op">,</span> step)<span class="op">;</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>      format <span class="op">=</span> format <span class="op">||</span> <span class="st">"%M:%S.%L"</span><span class="op">;</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>      <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="st">"second"</span><span class="op">:</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>      ts <span class="op">=</span> d3<span class="op">.</span><span class="fu">utcSeconds</span>(start<span class="op">,</span> end<span class="op">,</span> step)<span class="op">;</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>      format <span class="op">=</span> format <span class="op">||</span> <span class="st">"%H:%M:%S"</span><span class="op">;</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>      <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="st">"minute"</span><span class="op">:</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>      ts <span class="op">=</span> d3<span class="op">.</span><span class="fu">utcMinutes</span>(start<span class="op">,</span> end<span class="op">,</span> step)<span class="op">;</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>      format <span class="op">=</span> format <span class="op">||</span> <span class="st">"%H:%M"</span><span class="op">;</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>      <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="st">"hour"</span><span class="op">:</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>      ts <span class="op">=</span> d3<span class="op">.</span><span class="fu">utcHours</span>(start<span class="op">,</span> end<span class="op">,</span> step)<span class="op">;</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>      format <span class="op">=</span> format <span class="op">||</span> <span class="st">"%H:%M"</span><span class="op">;</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>      <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="st">"day"</span><span class="op">:</span></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>      ts <span class="op">=</span> d3<span class="op">.</span><span class="fu">utcDays</span>(start<span class="op">,</span> end<span class="op">,</span> step)<span class="op">;</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>      format <span class="op">=</span> format <span class="op">||</span> <span class="st">"%Y-%m-%d"</span><span class="op">;</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>      <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="st">"week"</span><span class="op">:</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>      ts <span class="op">=</span> d3<span class="op">.</span><span class="fu">utcWeeks</span>(start<span class="op">,</span> end<span class="op">,</span> step)<span class="op">;</span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>      format <span class="op">=</span> format <span class="op">||</span> <span class="st">"%Y-%m-%d"</span><span class="op">;</span></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>      <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="st">"month"</span><span class="op">:</span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>      ts <span class="op">=</span> d3<span class="op">.</span><span class="fu">utcMonths</span>(start<span class="op">,</span> end<span class="op">,</span> step)<span class="op">;</span></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>      format <span class="op">=</span> format <span class="op">||</span> <span class="st">"%b %Y"</span><span class="op">;</span></span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>      <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="st">"year"</span><span class="op">:</span></span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>      ts <span class="op">=</span> d3<span class="op">.</span><span class="fu">utcYears</span>(start<span class="op">,</span> end<span class="op">,</span> step)<span class="op">;</span></span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>      format <span class="op">=</span> format <span class="op">||</span> <span class="st">"%Y"</span><span class="op">;</span></span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>      <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>    <span class="cf">default</span><span class="op">:</span></span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>      <span class="cf">throw</span> <span class="bu">Error</span>(<span class="vs">`Unknown time interval "</span><span class="sc">${</span>interval<span class="sc">}</span><span class="vs">" provided to timeRange`</span>)<span class="op">;</span></span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Because we are dealing with Date objects rather than primitives, the value setting for initial</span></span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>  <span class="co">// selection needs to be matched against closest of the internally stored Dates rather than direct</span></span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>  <span class="co">// equality testing.</span></span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> findClosestDate <span class="op">=</span> (targetDate) <span class="kw">=&gt;</span> {</span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="op">!</span>targetDate <span class="op">||</span> ts<span class="op">.</span><span class="at">length</span> <span class="op">===</span> <span class="dv">0</span>) {</span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> <span class="kw">null</span><span class="op">;</span></span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> closestDate <span class="op">=</span> ts[<span class="dv">0</span>]<span class="op">;</span></span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> smallestDifference <span class="op">=</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">abs</span>(ts[<span class="dv">0</span>] <span class="op">-</span> targetDate)<span class="op">;</span></span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (<span class="kw">const</span> date <span class="kw">of</span> ts) {</span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>      <span class="kw">const</span> difference <span class="op">=</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">abs</span>(date <span class="op">-</span> targetDate)<span class="op">;</span></span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (difference <span class="op">&lt;</span> smallestDifference) {</span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>        smallestDifference <span class="op">=</span> difference<span class="op">;</span></span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a>        closestDate <span class="op">=</span> date<span class="op">;</span></span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> closestDate<span class="op">;</span></span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a>  }<span class="op">;</span></span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> minSel<span class="op">,</span> maxSel<span class="op">;</span></span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (value <span class="op">&amp;&amp;</span> value<span class="op">.</span><span class="at">length</span> <span class="op">===</span> <span class="dv">2</span>) {</span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a>    minSel <span class="op">=</span> <span class="fu">findClosestDate</span>(value[<span class="dv">0</span>])<span class="op">;</span></span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>    maxSel <span class="op">=</span> <span class="fu">findClosestDate</span>(value[<span class="dv">1</span>])<span class="op">;</span></span>
+<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a>    minSel <span class="op">=</span> ts[<span class="dv">0</span>]<span class="op">;</span></span>
+<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a>    maxSel <span class="op">=</span> ts<span class="op">.</span><span class="fu">at</span>(<span class="op">-</span><span class="dv">1</span>)<span class="op">;</span></span>
+<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="fu">offsetInterval</span>(ts<span class="op">,</span> {</span>
+<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a>    <span class="dt">value</span><span class="op">:</span> [minSel<span class="op">,</span> maxSel]<span class="op">,</span></span>
+<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a>    <span class="dt">label</span><span class="op">:</span> label<span class="op">,</span></span>
+<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a>    <span class="dt">format</span><span class="op">:</span> ([a<span class="op">,</span> b]) <span class="kw">=&gt;</span> htl<span class="op">.</span><span class="fu">html</span><span class="vs">`&lt;span </span><span class="sc">${</span>{</span>
+<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a>      <span class="dt">style</span><span class="op">:</span> <span class="st">"display: flex; justify-content: space-between"</span></span>
+<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a>    }<span class="sc">}</span><span class="vs">&gt;</span></span>
+<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a><span class="vs">      &lt;span&gt;</span><span class="sc">${</span>a<span class="op">.</span><span class="fu">toLocaleString</span>(<span class="kw">undefined</span><span class="op">,</span> {<span class="dt">year</span><span class="op">:</span> <span class="st">"numeric"</span>})<span class="sc">}</span><span class="vs">&lt;/span&gt;</span></span>
+<span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a><span class="vs">      &lt;span&gt;</span><span class="sc">${</span>b<span class="op">.</span><span class="fu">toLocaleString</span>(<span class="kw">undefined</span><span class="op">,</span> {<span class="dt">year</span><span class="op">:</span> <span class="st">"numeric"</span>})<span class="sc">}</span><span class="vs">&lt;/span&gt;</span></span>
+<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a><span class="vs">    &lt;/span&gt;`</span></span>
+<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-7" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb8" data-startfrom="-1" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line -2;"><span id="cb8--1"><a href="#cb8--1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> {offsetInterval} <span class="im">from</span> <span class="st">"@mootari/offset-slider"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-8" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb9" data-startfrom="-1" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line -2;"><span id="cb9--1"><a href="#cb9--1" aria-hidden="true" tabindex="-1"></a><span class="fu">html</span><span class="vs">`</span></span>
+<span id="cb9-0"><a href="#cb9-0" aria-hidden="true" tabindex="-1"></a><span class="vs">&lt;link href="https://fonts.googleapis.com/css2?family=Indie+Flower&amp;family=Patrick+Hand&amp;family=Shadows+Into+Light&amp;display=swap" rel="stylesheet"&gt;</span></span>
+<span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="vs">`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-9" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb10" data-startfrom="-1" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line -2;"><span id="cb10--1"><a href="#cb10--1" aria-hidden="true" tabindex="-1"></a>svg2rough <span class="op">=</span> <span class="im">import</span>(<span class="st">"https://cdn.skypack.dev/svg2roughjs@3.0.1?min"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-10" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb11" data-startfrom="-1" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line -2;"><span id="cb11--1"><a href="#cb11--1" aria-hidden="true" tabindex="-1"></a>makeRough <span class="op">=</span> (svg<span class="op">,</span> {</span>
+<span id="cb11-0"><a href="#cb11-0" aria-hidden="true" tabindex="-1"></a>  backgroundColor <span class="op">=</span> <span class="st">"white"</span><span class="op">,</span></span>
+<span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>  fontFamily <span class="op">=</span> <span class="st">"cursive"</span><span class="op">,</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  fillStyle <span class="op">=</span> <span class="st">"hachure"</span><span class="op">,</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  roughness <span class="op">=</span> <span class="fl">1.5</span><span class="op">,</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  bowing <span class="op">=</span> <span class="dv">1</span><span class="op">,</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  randomize <span class="op">=</span> <span class="kw">true</span><span class="op">,</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  pencilFilter <span class="op">=</span> <span class="kw">true</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>} <span class="op">=</span> {}) <span class="kw">=&gt;</span> {</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> S <span class="op">=</span> <span class="bu">Object</span><span class="op">.</span><span class="fu">assign</span>(</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">new</span> svg2rough<span class="op">.</span><span class="fu">Svg2Roughjs</span>(<span class="bu">document</span><span class="op">.</span><span class="fu">createElement</span>(<span class="st">"svg"</span>))<span class="op">,</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>      svg<span class="op">,</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>      backgroundColor<span class="op">,</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>      pencilFilter<span class="op">,</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>      randomize<span class="op">,</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>      fontFamily<span class="op">,</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>      <span class="dt">roughConfig</span><span class="op">:</span> { bowing<span class="op">,</span> roughness<span class="op">,</span> fillStyle }</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>  )<span class="op">;</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>  S<span class="op">.</span><span class="fu">sketch</span>()<span class="op">;</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> S<span class="op">.</span><span class="at">outputElement</span><span class="op">;</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-11" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb12" data-startfrom="-1" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line -2;"><span id="cb12--1"><a href="#cb12--1" aria-hidden="true" tabindex="-1"></a>viewof quartoThemeIsDark <span class="op">=</span> {</span>
+<span id="cb12-0"><a href="#cb12-0" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> span <span class="op">=</span> <span class="fu">html</span><span class="vs">`&lt;span style="display: none;"&gt;&lt;/span&gt;`</span><span class="op">;</span></span>
+<span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">function</span> <span class="fu">updateTheme</span>() {</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> isDark <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="at">body</span><span class="op">.</span><span class="at">classList</span><span class="op">.</span><span class="fu">contains</span>(<span class="st">"quarto-dark"</span>)<span class="op">;</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    span<span class="op">.</span><span class="at">value</span> <span class="op">=</span> isDark<span class="op">;</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    span<span class="op">.</span><span class="fu">dispatchEvent</span>(<span class="kw">new</span> <span class="bu">CustomEvent</span>(<span class="st">"input"</span>))<span class="op">;</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Initial check</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">updateTheme</span>()<span class="op">;</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Observer les changements de classe sur &lt;body&gt;</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> observer <span class="op">=</span> <span class="kw">new</span> <span class="bu">MutationObserver</span>(() <span class="kw">=&gt;</span> <span class="fu">updateTheme</span>())<span class="op">;</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  observer<span class="op">.</span><span class="fu">observe</span>(<span class="bu">document</span><span class="op">.</span><span class="at">body</span><span class="op">,</span> {</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    <span class="dt">attributes</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    <span class="dt">attributeFilter</span><span class="op">:</span> [<span class="st">"class"</span>]</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Nettoyage si jamais nécessaire</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>  span<span class="op">.</span><span class="at">remove</span> <span class="op">=</span> () <span class="kw">=&gt;</span> observer<span class="op">.</span><span class="fu">disconnect</span>()<span class="op">;</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> span<span class="op">;</span></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-12" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<!-----------
+Comme je trouve la manière dont le _New York Times_ gère l'interactivité de ses figures extrêmement bien pensée, j'ai essayé de reprendre leur logique avec le texte s'affichant en fonction du pointeur. J'ai trouvé sur [ce _notebook_](https://observablehq.com/@observablehq/plot-pointer-driven-marks) une reproduction de cette technique que j'ai adaptée à mes besoins.
+------------->
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb13" data-startfrom="-1" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line -2;"><span id="cb13--1"><a href="#cb13--1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> {pointerMX<span class="op">,</span> renderMultipleText<span class="op">,</span> customOverlapRender} <span class="im">from</span> <span class="st">"@observablehq/plot-pointer-driven-marks"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-13" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell hidden">
+<div class="sourceCode cell-code hidden" id="cb14" data-startfrom="0" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line -1;"><span id="cb14-0"><a href="#cb14-0" aria-hidden="true" tabindex="-1"></a>plot_playfair_raw <span class="op">=</span> {</span>
+<span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// règle de responsive</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> plotWidth<span class="op">;</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (width <span class="op">&lt;</span> <span class="dv">768</span>) { <span class="co">// seuil pour mobile/tablette</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    plotWidth <span class="op">=</span> width <span class="op">*</span> <span class="fl">0.95</span><span class="op">;</span> <span class="co">// quasi toute la largeur</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    plotWidth <span class="op">=</span> width <span class="op">*</span> <span class="fl">0.5</span><span class="op">;</span> <span class="co">// moitié de l'écran sur grand</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> plotHeight <span class="op">=</span> plotWidth <span class="op">*</span> <span class="fl">8.5</span><span class="op">/</span><span class="dv">5</span><span class="op">;</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> plot_playfair_raw <span class="op">=</span> Plot<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">width</span><span class="op">:</span> plotWidth<span class="op">,</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">height</span><span class="op">:</span> plotHeight<span class="op">,</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    <span class="dt">style</span><span class="op">:</span> {</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>      <span class="dt">backgroundColor</span><span class="op">:</span> <span class="st">'#fbe9d3'</span><span class="op">,</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>      <span class="dt">color</span><span class="op">:</span> <span class="st">'black'</span><span class="op">,</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    }<span class="op">,</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>    <span class="dt">x</span><span class="op">:</span> { <span class="dt">label</span><span class="op">:</span> <span class="st">"Année"</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [d3<span class="op">.</span><span class="fu">min</span>(df<span class="op">,</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">TIME_PERIOD</span>)<span class="op">,</span> d3<span class="op">.</span><span class="fu">max</span>(df<span class="op">,</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">TIME_PERIOD</span>)]}<span class="op">,</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>    <span class="dt">y</span><span class="op">:</span> {</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>      <span class="dt">axis</span><span class="op">:</span> <span class="st">"right"</span><span class="op">,</span></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>      <span class="dt">label</span><span class="op">:</span> <span class="st">"Ratio dette/PIB (%)"</span><span class="op">,</span></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>    }<span class="op">,</span></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>    <span class="dt">marks</span><span class="op">:</span> [</span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>      Plot<span class="op">.</span><span class="fu">areaY</span>(df<span class="op">,</span> {</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>        <span class="dt">x</span><span class="op">:</span> <span class="st">"TIME_PERIOD"</span><span class="op">,</span></span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>        <span class="dt">y2</span><span class="op">:</span> <span class="st">"OBS_VALUE_NIVEAU"</span><span class="op">,</span></span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>        <span class="dt">y1</span><span class="op">:</span> d <span class="kw">=&gt;</span> d3<span class="op">.</span><span class="fu">min</span>(df<span class="op">,</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">OBS_VALUE_NIVEAU</span>)<span class="op">,</span></span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>        <span class="dt">fill</span><span class="op">:</span> <span class="st">"#a9997a"</span><span class="op">,</span></span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>        <span class="dt">curve</span><span class="op">:</span> <span class="st">"linear"</span><span class="op">,</span></span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>        <span class="dt">opacity</span><span class="op">:</span> <span class="fl">0.8</span></span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>      })<span class="op">,</span></span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>      Plot<span class="op">.</span><span class="fu">line</span>(df<span class="op">,</span> {</span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a>        <span class="dt">x</span><span class="op">:</span> <span class="st">"TIME_PERIOD"</span><span class="op">,</span></span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a>        <span class="dt">y</span><span class="op">:</span> <span class="st">"OBS_VALUE_NIVEAU"</span><span class="op">,</span></span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a>        <span class="dt">stroke</span><span class="op">:</span> <span class="st">"darkred"</span><span class="op">,</span></span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>        <span class="dt">strokeWidth</span><span class="op">:</span> <span class="fl">3.5</span><span class="op">,</span></span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a>        <span class="dt">curve</span><span class="op">:</span> <span class="st">"linear"</span><span class="op">,</span></span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a>        <span class="dt">tip</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a>        <span class="dt">strokeOpacity</span><span class="op">:</span> <span class="fl">0.6</span></span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a>      })<span class="op">,</span></span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a>      Plot<span class="op">.</span><span class="fu">gridY</span>({ <span class="dt">strokeOpacity</span><span class="op">:</span> <span class="fl">0.6</span> })<span class="op">,</span></span>
+<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a>      Plot<span class="op">.</span><span class="fu">gridX</span>({ <span class="dt">strokeOpacity</span><span class="op">:</span> <span class="fl">0.6</span><span class="op">,</span> <span class="dt">interval</span><span class="op">:</span> <span class="st">"1 year"</span> })<span class="op">,</span></span>
+<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a>      <span class="co">// --- évènements ---</span></span>
+<span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a>      Plot<span class="op">.</span><span class="fu">text</span>(</span>
+<span id="cb14-47"><a href="#cb14-47" aria-hidden="true" tabindex="-1"></a>        [{ <span class="dt">TIME_PERIOD</span><span class="op">:</span> <span class="kw">new</span> <span class="bu">Date</span>(<span class="st">"2008-01-01"</span>)<span class="op">,</span> <span class="dt">OBS_VALUE_NIVEAU</span><span class="op">:</span> d3<span class="op">.</span><span class="fu">max</span>(df<span class="op">,</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">OBS_VALUE_NIVEAU</span>) }]<span class="op">,</span></span>
+<span id="cb14-48"><a href="#cb14-48" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb14-49"><a href="#cb14-49" aria-hidden="true" tabindex="-1"></a>          <span class="dt">x</span><span class="op">:</span> (d) <span class="kw">=&gt;</span> d3<span class="op">.</span><span class="at">timeMonth</span><span class="op">.</span><span class="fu">offset</span>(d<span class="op">.</span><span class="at">TIME_PERIOD</span><span class="op">,</span> <span class="op">-</span><span class="dv">5</span>)<span class="op">,</span></span>
+<span id="cb14-50"><a href="#cb14-50" aria-hidden="true" tabindex="-1"></a>          <span class="dt">y</span><span class="op">:</span> (d) <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">OBS_VALUE_NIVEAU</span> <span class="op">-</span> <span class="dv">20</span><span class="op">,</span></span>
+<span id="cb14-51"><a href="#cb14-51" aria-hidden="true" tabindex="-1"></a>          <span class="dt">text</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="st">"Crise financière"</span><span class="op">,</span></span>
+<span id="cb14-52"><a href="#cb14-52" aria-hidden="true" tabindex="-1"></a>          <span class="dt">rotate</span><span class="op">:</span> <span class="op">-</span><span class="dv">90</span><span class="op">,</span></span>
+<span id="cb14-53"><a href="#cb14-53" aria-hidden="true" tabindex="-1"></a>          <span class="dt">dy</span><span class="op">:</span> <span class="op">-</span><span class="dv">20</span><span class="op">,</span></span>
+<span id="cb14-54"><a href="#cb14-54" aria-hidden="true" tabindex="-1"></a>          <span class="dt">fontSize</span><span class="op">:</span> <span class="dv">12</span><span class="op">,</span></span>
+<span id="cb14-55"><a href="#cb14-55" aria-hidden="true" tabindex="-1"></a>          <span class="dt">fill</span><span class="op">:</span> <span class="st">"black"</span><span class="op">,</span></span>
+<span id="cb14-56"><a href="#cb14-56" aria-hidden="true" tabindex="-1"></a>          <span class="dt">textAnchor</span><span class="op">:</span> <span class="st">"end"</span><span class="op">,</span></span>
+<span id="cb14-57"><a href="#cb14-57" aria-hidden="true" tabindex="-1"></a>          <span class="dt">fontWeight</span><span class="op">:</span> <span class="st">"bold"</span></span>
+<span id="cb14-58"><a href="#cb14-58" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb14-59"><a href="#cb14-59" aria-hidden="true" tabindex="-1"></a>      )<span class="op">,</span></span>
+<span id="cb14-60"><a href="#cb14-60" aria-hidden="true" tabindex="-1"></a>      Plot<span class="op">.</span><span class="fu">text</span>(</span>
+<span id="cb14-61"><a href="#cb14-61" aria-hidden="true" tabindex="-1"></a>        [{ <span class="dt">TIME_PERIOD</span><span class="op">:</span> <span class="kw">new</span> <span class="bu">Date</span>(<span class="st">"2020-01-01"</span>)<span class="op">,</span> <span class="dt">OBS_VALUE_NIVEAU</span><span class="op">:</span> d3<span class="op">.</span><span class="fu">max</span>(df<span class="op">,</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">OBS_VALUE_NIVEAU</span>) }]<span class="op">,</span></span>
+<span id="cb14-62"><a href="#cb14-62" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb14-63"><a href="#cb14-63" aria-hidden="true" tabindex="-1"></a>          <span class="dt">x</span><span class="op">:</span> (d) <span class="kw">=&gt;</span> d3<span class="op">.</span><span class="at">timeMonth</span><span class="op">.</span><span class="fu">offset</span>(d<span class="op">.</span><span class="at">TIME_PERIOD</span><span class="op">,</span> <span class="op">-</span><span class="dv">5</span>)<span class="op">,</span></span>
+<span id="cb14-64"><a href="#cb14-64" aria-hidden="true" tabindex="-1"></a>          <span class="dt">y</span><span class="op">:</span> (d) <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">OBS_VALUE_NIVEAU</span> <span class="op">-</span> <span class="dv">20</span><span class="op">,</span></span>
+<span id="cb14-65"><a href="#cb14-65" aria-hidden="true" tabindex="-1"></a>          <span class="dt">text</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="st">"Covid"</span><span class="op">,</span></span>
+<span id="cb14-66"><a href="#cb14-66" aria-hidden="true" tabindex="-1"></a>          <span class="dt">rotate</span><span class="op">:</span> <span class="op">-</span><span class="dv">90</span><span class="op">,</span></span>
+<span id="cb14-67"><a href="#cb14-67" aria-hidden="true" tabindex="-1"></a>          <span class="dt">dy</span><span class="op">:</span> <span class="op">-</span><span class="dv">20</span><span class="op">,</span></span>
+<span id="cb14-68"><a href="#cb14-68" aria-hidden="true" tabindex="-1"></a>          <span class="dt">fontSize</span><span class="op">:</span> <span class="dv">12</span><span class="op">,</span></span>
+<span id="cb14-69"><a href="#cb14-69" aria-hidden="true" tabindex="-1"></a>          <span class="dt">fill</span><span class="op">:</span> <span class="st">"black"</span><span class="op">,</span></span>
+<span id="cb14-70"><a href="#cb14-70" aria-hidden="true" tabindex="-1"></a>          <span class="dt">textAnchor</span><span class="op">:</span> <span class="st">"end"</span><span class="op">,</span></span>
+<span id="cb14-71"><a href="#cb14-71" aria-hidden="true" tabindex="-1"></a>          <span class="dt">fontWeight</span><span class="op">:</span> <span class="st">"bold"</span></span>
+<span id="cb14-72"><a href="#cb14-72" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb14-73"><a href="#cb14-73" aria-hidden="true" tabindex="-1"></a>      )<span class="op">,</span></span>
+<span id="cb14-74"><a href="#cb14-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-75"><a href="#cb14-75" aria-hidden="true" tabindex="-1"></a>      <span class="co">// ton image</span></span>
+<span id="cb14-76"><a href="#cb14-76" aria-hidden="true" tabindex="-1"></a>      Plot<span class="op">.</span><span class="fu">image</span>(temp<span class="op">,</span> {</span>
+<span id="cb14-77"><a href="#cb14-77" aria-hidden="true" tabindex="-1"></a>        <span class="dt">x</span><span class="op">:</span> <span class="st">"x"</span><span class="op">,</span></span>
+<span id="cb14-78"><a href="#cb14-78" aria-hidden="true" tabindex="-1"></a>        <span class="dt">y</span><span class="op">:</span> <span class="st">"y"</span><span class="op">,</span></span>
+<span id="cb14-79"><a href="#cb14-79" aria-hidden="true" tabindex="-1"></a>        <span class="dt">src</span><span class="op">:</span> <span class="st">"https://minio.lab.sspcloud.fr/lgaliana/data/dataviz/chart_national_debt2.png"</span><span class="op">,</span></span>
+<span id="cb14-80"><a href="#cb14-80" aria-hidden="true" tabindex="-1"></a>        <span class="dt">width</span><span class="op">:</span> <span class="dv">160</span><span class="op">,</span></span>
+<span id="cb14-81"><a href="#cb14-81" aria-hidden="true" tabindex="-1"></a>        <span class="dt">title</span><span class="op">:</span> <span class="st">"Title"</span></span>
+<span id="cb14-82"><a href="#cb14-82" aria-hidden="true" tabindex="-1"></a>      })</span>
+<span id="cb14-83"><a href="#cb14-83" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb14-84"><a href="#cb14-84" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb14-85"><a href="#cb14-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-86"><a href="#cb14-86" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> plot_playfair_raw</span>
+<span id="cb14-87"><a href="#cb14-87" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display hidden">
+<div id="ojs-cell-14" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb15" data-startfrom="-1" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line -2;"><span id="cb15--1"><a href="#cb15--1" aria-hidden="true" tabindex="-1"></a>viewof yearZoom <span class="op">=</span> <span class="fu">timeRange</span>(</span>
+<span id="cb15-0"><a href="#cb15-0" aria-hidden="true" tabindex="-1"></a>  <span class="kw">new</span> d3<span class="op">.</span><span class="fu">min</span>(df<span class="op">,</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">TIME_PERIOD</span>)<span class="op">,</span></span>
+<span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>  <span class="kw">new</span> d3<span class="op">.</span><span class="fu">max</span>(df<span class="op">,</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">TIME_PERIOD</span>)<span class="op">,</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">interval</span><span class="op">:</span> <span class="st">"year"</span><span class="op">,</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">value</span><span class="op">:</span> [<span class="kw">new</span> d3<span class="op">.</span><span class="fu">min</span>(df<span class="op">,</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">TIME_PERIOD</span>)<span class="op">,</span> <span class="kw">new</span> d3<span class="op">.</span><span class="fu">max</span>(df<span class="op">,</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">TIME_PERIOD</span>)]</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-15" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W3sibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMSIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6IntcbiAgLy8gQ3LDqWUgbGUgY29udGVuZXVyXG4gIGNvbnN0IGNvbnRhaW5lciA9IGh0bWxgPGRpdiBjbGFzcz1cImZpZ3VyZXMtcGxheWZhaXJcIj48L2Rpdj5gO1xuXG4gIC8vIFBldGl0ZSBmb25jdGlvbiB1dGlsaXRhaXJlIHBvdXIgKHJlKWZhaXJlIGxhIG1pc2UgZW4gcGFnZVxuICBjb25zdCBtcSA9IHdpbmRvdy5tYXRjaE1lZGlhKFwiKG1pbi13aWR0aDogOTAwcHgpXCIpO1xuICBmdW5jdGlvbiBhcHBseUxheW91dCgpIHtcbiAgICBjb250YWluZXIuc3R5bGUuZGlzcGxheSA9IFwiZ3JpZFwiO1xuICAgIGNvbnRhaW5lci5zdHlsZS5ncmlkVGVtcGxhdGVDb2x1bW5zID0gbXEubWF0Y2hlcyA/IFwiMWZyIDFmclwiIDogXCIxZnJcIjtcbiAgICBjb250YWluZXIuc3R5bGUuZ2FwID0gXCIxNnB4XCI7XG4gICAgY29udGFpbmVyLnN0eWxlLmFsaWduSXRlbXMgPSBcInN0YXJ0XCI7XG4gIH1cblxuICAvLyBDb25zdHJ1aXJlIGxlcyBkZXV4IHBhbm5lYXV4XG4gIGNvbnN0IGxlZnQgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KFwiZGl2XCIpO1xuICBsZWZ0LmFwcGVuZENoaWxkKGh0bWxgPGg0PkxhIGRldHRlIGZyYW7Dp2Fpc2UsIMOgIGxhIFBsYXlmYWlyPC9oND5gKTtcbiAgbGVmdC5hcHBlbmRDaGlsZChcbiAgICBtYWtlUm91Z2goXG4gICAgICBwbG90X3BsYXlmYWlyX3JhdyxcbiAgICAgIHsgcmFuZG9taXplOiBmYWxzZSwgYm93aW5nOiAwLCByb3VnaG5lc3M6IDAsIGJhY2tncm91bmRDb2xvcjogXCIjZmJlOWQzXCIsIGZpbGxTdHlsZTogXCJzb2xpZFwiLCBmb250RmFtaWx5OiBcIlBhdHJpY2sgSGFuZFwiIH1cbiAgICApXG4gICk7XG5cbiAgY29uc3QgcmlnaHQgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KFwiZGl2XCIpO1xuICByaWdodC5hcHBlbmRDaGlsZChodG1sYDxoND5WZXJzaW9uIG9yaWdpbmFsZTwvaDQ+YCk7XG4gIGNvbnN0IGltZyA9IE9iamVjdC5hc3NpZ24obmV3IEltYWdlKCksIHsgc3JjOiBcInBsYXlmYWlyLW5hdGlvbmFsLWRlYnQucG5nXCIgfSk7XG4gIC8vIEltYWdlIHJlc3BvbnNpdmVcbiAgaW1nLnN0eWxlLm1heFdpZHRoID0gXCIxMDAlXCI7XG4gIGltZy5zdHlsZS5oZWlnaHQgPSBcImF1dG9cIjtcbiAgcmlnaHQuYXBwZW5kQ2hpbGQoaW1nKTtcblxuICBjb250YWluZXIuYXBwZW5kKGxlZnQsIHJpZ2h0KTtcblxuICAvLyBBcHBsaXF1ZSBsYSBtaXNlIGVuIHBhZ2UgaW5pdGlhbGUgZXQgw6ljb3V0ZSBsZXMgY2hhbmdlbWVudHNcbiAgYXBwbHlMYXlvdXQoKTtcblxuICAvLyBDb21wYXQgYW5jaWVuIC8gbm91dmVhdSBuYXZpZ2F0ZXVyXG4gIGlmIChtcS5hZGRFdmVudExpc3RlbmVyKSBtcS5hZGRFdmVudExpc3RlbmVyKFwiY2hhbmdlXCIsIGFwcGx5TGF5b3V0KTtcbiAgZWxzZSBtcS5hZGRMaXN0ZW5lcihhcHBseUxheW91dCk7XG5cbiAgLy8gU8OpY3VyaXNlciBhdmVjIHVuIGxpc3RlbmVyIGRlIHJlc2l6ZSAoYXUgY2FzIG/DuSlcbiAgY29uc3Qgb25SZXNpemUgPSAoKSA9PiBhcHBseUxheW91dCgpO1xuICB3aW5kb3cuYWRkRXZlbnRMaXN0ZW5lcihcInJlc2l6ZVwiLCBvblJlc2l6ZSk7XG5cbiAgLy8gTmV0dG95YWdlIHNpIGxlIERPTSBlc3QgZMOpdGFjaMOpXG4gIGNvbnRhaW5lci5hZGRFdmVudExpc3RlbmVyKFwiRE9NTm9kZVJlbW92ZWRcIiwgKCkgPT4ge1xuICAgIGlmIChtcS5yZW1vdmVFdmVudExpc3RlbmVyKSBtcS5yZW1vdmVFdmVudExpc3RlbmVyKFwiY2hhbmdlXCIsIGFwcGx5TGF5b3V0KTtcbiAgICBlbHNlIG1xLnJlbW92ZUxpc3RlbmVyKGFwcGx5TGF5b3V0KTtcbiAgICB3aW5kb3cucmVtb3ZlRXZlbnRMaXN0ZW5lcihcInJlc2l6ZVwiLCBvblJlc2l6ZSk7XG4gIH0sIHsgb25jZTogdHJ1ZSB9KTtcblxuICByZXR1cm4gY29udGFpbmVyO1xufVxuXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTIiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJodG1sYFxuJHt2aWV3b2YgeWVhclpvb219XG4ke3ZpZXdvZiBwbG90X21vZGVybn1cbmAgXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTMiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJ2aWV3b2YgcGxvdF9tb2Rlcm4gPSBQbG90LnBsb3Qoe1xuICB3aWR0aDogNjcwLFxuICBoZWlnaHQ6IDMzMCxcbiAgbWFyZ2luQm90dG9tOiAzOCxcbiAgbWFyZ2luUmlnaHQ6IDEzMCxcbiAgc3R5bGU6IFwidXNlci1zZWxlY3Q6IG5vbmU7IHRvdWNoLWFjdGlvbjogbm9uZTsgbWF4LXdpZHRoOiAxMDAlO1wiLFxuICB0aXRsZTogaHRtbGA8ZGl2IHN0eWxlPVwiZm9udC1mYW1pbHk6IHZhcigtLXNhbnMtc2VyaWYpOyBmb250LXdlaWdodDogNjAwO1wiPiR7J0xhIGRldHRlIGRlcyBhZG1pbmlzdHJhdGlvbnMgcHVibGlxdWVzIGZyYW7Dp2Fpc2VzJ308L2Rpdj5gLFxuICBjYXB0aW9uOiBtZGBDZXR0ZSBmaWd1cmUgcmVwcsOpc2VudGUgbGEgW2RldHRlIGF1IHNlbnMgZGUgTWFhc3RyaWNodF0oaHR0cHM6Ly93d3cuaW5zZWUuZnIvZnIvc3RhdGlzdGlxdWVzLzg1NzQ3MDM/c29tbWFpcmU9ODU3NDgzMiNkb2N1bWVudGF0aW9uKSBkZXMgYWRtaW5pc3RyYXRpb25zIHB1YmxpcXVlcyBmcmFuw6dhaXNlcywgcmFwcG9ydMOpZSBhdSBQSUIuIExlcyBzZXVpbHMgZGUgNjAlIChjcml0w6hyZSBkZSBjb252ZXJnZW5jZSBkZSBNYWFzdHJpY2h0KSBldCBkZSAxMDAlIChkZXR0ZSDDqWdhbGUgYXUgUElCKSBvbnQgw6l0w6kgcmFwcG9ydMOpcy48YnI+U291cmNlOiBJbnNlZSwgW2NvbXB0ZXMgbmF0aW9uYXV4IGFubnVlbHNdKGh0dHBzOi8vd3d3Lmluc2VlLmZyL2ZyL3N0YXRpc3RpcXVlcy84NTc0NzAzP3NvbW1haXJlPTg1NzQ4MzIjZG9jdW1lbnRhdGlvbilgLFxuICB4OiB7IGRvbWFpbjogeWVhclpvb20sIGdyaWQ6IHRydWUsIGxhYmVsOiBcIkFubsOpZVwiIH0sXG4gIHk6IHtcbiAgICBncmlkOiB0cnVlLCBkb21haW46IFswLCBkMy5tYXgoZGYsIGQgPT4gZC5PQlNfVkFMVUVfTklWRUFVKSsxMF0sXG4gICAgbGFiZWw6IFwiUmF0aW8gZGV0dGUvUElCICglKVwiXG4gICAgfSxcbiAgbWFya3M6IFtcblxuICAgIFBsb3QucnVsZVkoXG4gICAgICBbNjAsIDEwMF0sXG4gICAgICB7c3Ryb2tlRGFzaGFycmF5OiBcIjQsMlwifVxuICAgICksXG5cbiAgICAvLyBwZXRpdCB0cmlhbmdsZSBpbmRpY2F0ZXVyXG4gICAgUGxvdC5kb3QoXG4gICAgICBkZixcbiAgICAgIHBvaW50ZXJNWCh7XG4gICAgICAgIHN5bWJvbDogXCJ0cmlhbmdsZVwiLFxuICAgICAgICB4OiBcIlRJTUVfUEVSSU9EXCIsXG4gICAgICAgIGZyYW1lQW5jaG9yOiBcInRvcFwiLFxuICAgICAgICBhdHJlc3Q6IFwibWF4WFwiLFxuICAgICAgICBmaWxsOiBcIiNjODEwMjVcIixcbiAgICAgICAgcm90YXRlOiAxODBcbiAgICAgIH0pXG4gICAgKSxcblxuICAgIC8vIGNvdXJiZSBmaW5lIGVuIGFycmnDqHJlLXBsYW5cbiAgICBQbG90LmxpbmVZKGRmLCB7XG4gICAgICB4OiBcIlRJTUVfUEVSSU9EXCIsXG4gICAgICB5OiBcIk9CU19WQUxVRV9OSVZFQVVcIixcbiAgICAgIHN0cm9rZTogXCJyZWRcIixcbiAgICAgIHN0cm9rZVdpZHRoOiAxLFxuICAgICAgY3VydmU6IFwibmF0dXJhbFwiLFxuICAgICAgb3BhY2l0eTogMC4yNTBcbiAgICB9KSxcblxuICAgIC8vIGNvdXJiZSBwcmluY2lwYWxlIFwibWlzZSBlbiBhdmFudFwiXG4gICAgUGxvdC5saW5lWShcbiAgICAgIGRmLFxuICAgICAgcG9pbnRlck1YKHtcbiAgICAgICAgeDogXCJUSU1FX1BFUklPRFwiLFxuICAgICAgICB5OiBcIk9CU19WQUxVRV9OSVZFQVVcIixcbiAgICAgICAgYXRyZXN0OiBcIm1heFhcIixcbiAgICAgICAgc2VsZWN0b3I6IFwiYmVmb3JlXCIsXG4gICAgICAgIHN0cm9rZTogXCIjYzgxMDI1XCIsXG4gICAgICAgIGN1cnZlOiBcIm5hdHVyYWxcIixcbiAgICAgICAgc3Ryb2tlV2lkdGg6IDMsXG4gICAgICAgIG1hcmtlclN0YXJ0OiB0cnVlXG4gICAgICB9KVxuICAgICksXG5cblxuICAgIC8vIGFubm90YXRpb24gZHUgbm9tIGRlIGxhIHPDqXJpZSAoZml4ZSA6IFwiRGV0dGVcIilcbiAgICBQbG90LnRleHQoXG4gICAgICBkZixcbiAgICAgIHBvaW50ZXJNWCh7XG4gICAgICAgIHg6IFwiVElNRV9QRVJJT0RcIixcbiAgICAgICAgeTogXCJPQlNfVkFMVUVfTklWRUFVXCIsXG4gICAgICAgIGF0cmVzdDogXCJtYXhYXCIsXG4gICAgICAgIHNlbGVjdG9yOiBcImVxXCIsXG4gICAgICAgIGZvbnRXZWlnaHQ6IFwiYm9sZFwiLFxuICAgICAgICB0ZXh0OiBkID0+IGQuT0JTX1ZBTFVFX05JVkVBVS50b0ZpeGVkKDEpICsgXCIgJVwiLFxuICAgICAgICBmb250U2l6ZTogMTQsXG4gICAgICAgIHRleHRBbmNob3I6IFwiZW5kXCIsXG4gICAgICAgIGR4OiA1MCxcbiAgICAgICAgc3Ryb2tlOiBcIndoaXRlXCIsXG4gICAgICAgIGZpbGw6IFwiI2M4MTAyNVwiXG4gICAgICB9KVxuICAgICksXG5cbiAgICAvLyBhbm5vdGF0aW9uIGRlIHZhbGV1ciBkeW5hbWlxdWVcbiAgICBQbG90LnRleHQoXG4gICAgICBkZixcbiAgICAgIHBvaW50ZXJNWCh7XG4gICAgICAgIHg6IFwiVElNRV9QRVJJT0RcIixcbiAgICAgICAgeTogXCJPQlNfVkFMVUVfTklWRUFVXCIsXG4gICAgICAgIGF0cmVzdDogXCJtYXhYXCIsXG4gICAgICAgIHRleHQ6IChkKSA9PiBkLlRJTUVfUEVSSU9ELnRvTG9jYWxlU3RyaW5nKHVuZGVmaW5lZCwge3llYXI6IFwibnVtZXJpY1wifSksXG4gICAgICAgIGZpbGw6IFwiY3VycmVudENvbG9yXCIsXG4gICAgICAgIGZyYW1lQW5jaG9yOiBcInRvcFwiLFxuICAgICAgICBkeTogLTE1XG4gICAgICB9KVxuICAgICksXG5cbiAgXVxufSk7XG5cbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtNCIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6ImZpbHRlcmVkID0gZGYuZmlsdGVyKGQgPT5cbiAgZC5USU1FX1BFUklPRCA+PSB5ZWFyWm9vbVswXSAmJiBkLlRJTUVfUEVSSU9EIDwgeWVhclpvb21bMV1cbik7XG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTUiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJkZiA9IGQzLmpzb24oXCJodHRwczovL2FwaS5pbnNlZS5mci9tZWxvZGkvZGF0YS9ERF9DTkFfQVBVP1JFRl9TRUNUT1I9UzEzJlNUTz1fREVUTkVUX1BQSUJcIikudGhlbihkYXRhID0+IHtcbiAgY29uc3QgZmxhdHRlbmVkID0gZGF0YS5vYnNlcnZhdGlvbnMubWFwKG9icyA9PiB7XG4gICAgY29uc3QgZGltZW5zaW9ucyA9IHsgLi4ub2JzLmRpbWVuc2lvbnMgfTtcblxuICAgIC8vIENvbnZlcnQgdG8gRGF0ZSBvYmplY3RcbiAgICBkaW1lbnNpb25zLlRJTUVfUEVSSU9EID0gbmV3IERhdGUoZGltZW5zaW9ucy5USU1FX1BFUklPRCArIFwiLTA2LTAxXCIpO1xuXG4gICAgY29uc3QgbWVhc3VyZXMgPSBPYmplY3QuZnJvbUVudHJpZXMoXG4gICAgICBPYmplY3QuZW50cmllcyhvYnMubWVhc3VyZXMgPz8ge30pLm1hcCgoW2ssIHZdKSA9PiBbaywgdi52YWx1ZV0pXG4gICAgKTtcblxuICAgIHJldHVybiB7XG4gICAgICAuLi5kaW1lbnNpb25zLFxuICAgICAgLi4ubWVhc3VyZXNcbiAgICB9O1xuICB9KTtcblxuICAvLyDirIXvuI8gU29ydCBpbiBhc2NlbmRpbmcgb3JkZXIgb2YgVElNRV9QRVJJT0RcbiAgZmxhdHRlbmVkLnNvcnQoKGEsIGIpID0+IGEuVElNRV9QRVJJT0QgLSBiLlRJTUVfUEVSSU9EKTtcblxuICBjb25zb2xlLnRhYmxlKGZsYXR0ZW5lZCk7XG4gIHJldHVybiBmbGF0dGVuZWQ7XG59KTtcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtNiIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6InRlbXAgPSBBcnJheSh7XG4gIHVybDogXCJodHRwczovL21pbmlvLmxhYi5zc3BjbG91ZC5mci9sZ2FsaWFuYS9kYXRhL2RhdGF2aXovY2hhcnRfbmF0aW9uYWxfZGVidDIucG5nXCIsXG4gIHg6IGQzLnRpbWVNb250aC5vZmZzZXQoIGQzLm1pbihmaWx0ZXJlZCwgZCA9PiBkLlRJTUVfUEVSSU9EKSwgLTE1MCksXG4gIHk6IGQzLm1heChmaWx0ZXJlZCwgZCA9PiBkLk9CU19WQUxVRV9OSVZFQVUpIC0gOFxufSlcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtNyIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6ImZ1bmN0aW9uIHRpbWVSYW5nZShzdGFydCwgZW5kLCBvcHRpb25zID0ge30pIHtcbiAgbGV0IHtcbiAgICBpbnRlcnZhbCA9IFwiZGF5XCIsXG4gICAgc3RlcCA9IDEsXG4gICAgZm9ybWF0ID0gbnVsbCxcbiAgICBsYWJlbCA9IG51bGwsXG4gICAgdmFsdWUgPSBudWxsXG4gIH0gPSBvcHRpb25zO1xuICBsZXQgdHM7XG4gIHN3aXRjaCAoaW50ZXJ2YWwudG9Mb3dlckNhc2UoKSkge1xuICAgIGNhc2UgXCJtaWxsaXNlY29uZFwiOlxuICAgICAgdHMgPSBkMy51dGNNaWxsaXNlY29uZHMoc3RhcnQsIGVuZCwgc3RlcCk7XG4gICAgICBmb3JtYXQgPSBmb3JtYXQgfHwgXCIlTTolUy4lTFwiO1xuICAgICAgYnJlYWs7XG4gICAgY2FzZSBcInNlY29uZFwiOlxuICAgICAgdHMgPSBkMy51dGNTZWNvbmRzKHN0YXJ0LCBlbmQsIHN0ZXApO1xuICAgICAgZm9ybWF0ID0gZm9ybWF0IHx8IFwiJUg6JU06JVNcIjtcbiAgICAgIGJyZWFrO1xuICAgIGNhc2UgXCJtaW51dGVcIjpcbiAgICAgIHRzID0gZDMudXRjTWludXRlcyhzdGFydCwgZW5kLCBzdGVwKTtcbiAgICAgIGZvcm1hdCA9IGZvcm1hdCB8fCBcIiVIOiVNXCI7XG4gICAgICBicmVhaztcbiAgICBjYXNlIFwiaG91clwiOlxuICAgICAgdHMgPSBkMy51dGNIb3VycyhzdGFydCwgZW5kLCBzdGVwKTtcbiAgICAgIGZvcm1hdCA9IGZvcm1hdCB8fCBcIiVIOiVNXCI7XG4gICAgICBicmVhaztcbiAgICBjYXNlIFwiZGF5XCI6XG4gICAgICB0cyA9IGQzLnV0Y0RheXMoc3RhcnQsIGVuZCwgc3RlcCk7XG4gICAgICBmb3JtYXQgPSBmb3JtYXQgfHwgXCIlWS0lbS0lZFwiO1xuICAgICAgYnJlYWs7XG4gICAgY2FzZSBcIndlZWtcIjpcbiAgICAgIHRzID0gZDMudXRjV2Vla3Moc3RhcnQsIGVuZCwgc3RlcCk7XG4gICAgICBmb3JtYXQgPSBmb3JtYXQgfHwgXCIlWS0lbS0lZFwiO1xuICAgICAgYnJlYWs7XG4gICAgY2FzZSBcIm1vbnRoXCI6XG4gICAgICB0cyA9IGQzLnV0Y01vbnRocyhzdGFydCwgZW5kLCBzdGVwKTtcbiAgICAgIGZvcm1hdCA9IGZvcm1hdCB8fCBcIiViICVZXCI7XG4gICAgICBicmVhaztcbiAgICBjYXNlIFwieWVhclwiOlxuICAgICAgdHMgPSBkMy51dGNZZWFycyhzdGFydCwgZW5kLCBzdGVwKTtcbiAgICAgIGZvcm1hdCA9IGZvcm1hdCB8fCBcIiVZXCI7XG4gICAgICBicmVhaztcbiAgICBkZWZhdWx0OlxuICAgICAgdGhyb3cgRXJyb3IoYFVua25vd24gdGltZSBpbnRlcnZhbCBcIiR7aW50ZXJ2YWx9XCIgcHJvdmlkZWQgdG8gdGltZVJhbmdlYCk7XG4gIH1cblxuICAvLyBCZWNhdXNlIHdlIGFyZSBkZWFsaW5nIHdpdGggRGF0ZSBvYmplY3RzIHJhdGhlciB0aGFuIHByaW1pdGl2ZXMsIHRoZSB2YWx1ZSBzZXR0aW5nIGZvciBpbml0aWFsXG4gIC8vIHNlbGVjdGlvbiBuZWVkcyB0byBiZSBtYXRjaGVkIGFnYWluc3QgY2xvc2VzdCBvZiB0aGUgaW50ZXJuYWxseSBzdG9yZWQgRGF0ZXMgcmF0aGVyIHRoYW4gZGlyZWN0XG4gIC8vIGVxdWFsaXR5IHRlc3RpbmcuXG4gIGNvbnN0IGZpbmRDbG9zZXN0RGF0ZSA9ICh0YXJnZXREYXRlKSA9PiB7XG4gICAgaWYgKCF0YXJnZXREYXRlIHx8IHRzLmxlbmd0aCA9PT0gMCkge1xuICAgICAgcmV0dXJuIG51bGw7XG4gICAgfVxuICAgIGxldCBjbG9zZXN0RGF0ZSA9IHRzWzBdO1xuICAgIGxldCBzbWFsbGVzdERpZmZlcmVuY2UgPSBNYXRoLmFicyh0c1swXSAtIHRhcmdldERhdGUpO1xuICAgIGZvciAoY29uc3QgZGF0ZSBvZiB0cykge1xuICAgICAgY29uc3QgZGlmZmVyZW5jZSA9IE1hdGguYWJzKGRhdGUgLSB0YXJnZXREYXRlKTtcbiAgICAgIGlmIChkaWZmZXJlbmNlIDwgc21hbGxlc3REaWZmZXJlbmNlKSB7XG4gICAgICAgIHNtYWxsZXN0RGlmZmVyZW5jZSA9IGRpZmZlcmVuY2U7XG4gICAgICAgIGNsb3Nlc3REYXRlID0gZGF0ZTtcbiAgICAgIH1cbiAgICB9XG4gICAgcmV0dXJuIGNsb3Nlc3REYXRlO1xuICB9O1xuXG4gIGxldCBtaW5TZWwsIG1heFNlbDtcbiAgaWYgKHZhbHVlICYmIHZhbHVlLmxlbmd0aCA9PT0gMikge1xuICAgIG1pblNlbCA9IGZpbmRDbG9zZXN0RGF0ZSh2YWx1ZVswXSk7XG4gICAgbWF4U2VsID0gZmluZENsb3Nlc3REYXRlKHZhbHVlWzFdKTtcbiAgfSBlbHNlIHtcbiAgICBtaW5TZWwgPSB0c1swXTtcbiAgICBtYXhTZWwgPSB0cy5hdCgtMSk7XG4gIH1cblxuICByZXR1cm4gb2Zmc2V0SW50ZXJ2YWwodHMsIHtcbiAgICB2YWx1ZTogW21pblNlbCwgbWF4U2VsXSxcbiAgICBsYWJlbDogbGFiZWwsXG4gICAgZm9ybWF0OiAoW2EsIGJdKSA9PiBodGwuaHRtbGA8c3BhbiAke3tcbiAgICAgIHN0eWxlOiBcImRpc3BsYXk6IGZsZXg7IGp1c3RpZnktY29udGVudDogc3BhY2UtYmV0d2VlblwiXG4gICAgfX0+XG4gICAgICA8c3Bhbj4ke2EudG9Mb2NhbGVTdHJpbmcodW5kZWZpbmVkLCB7eWVhcjogXCJudW1lcmljXCJ9KX08L3NwYW4+XG4gICAgICA8c3Bhbj4ke2IudG9Mb2NhbGVTdHJpbmcodW5kZWZpbmVkLCB7eWVhcjogXCJudW1lcmljXCJ9KX08L3NwYW4+XG4gICAgPC9zcGFuPmBcbiAgICB9KVxuXG59XG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTgiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJpbXBvcnQge29mZnNldEludGVydmFsfSBmcm9tIFwiQG1vb3Rhcmkvb2Zmc2V0LXNsaWRlclwiXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTkiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJodG1sYFxuPGxpbmsgaHJlZj1cImh0dHBzOi8vZm9udHMuZ29vZ2xlYXBpcy5jb20vY3NzMj9mYW1pbHk9SW5kaWUrRmxvd2VyJmZhbWlseT1QYXRyaWNrK0hhbmQmZmFtaWx5PVNoYWRvd3MrSW50bytMaWdodCZkaXNwbGF5PXN3YXBcIiByZWw9XCJzdHlsZXNoZWV0XCI+XG5gXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTEwIiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoic3ZnMnJvdWdoID0gaW1wb3J0KFwiaHR0cHM6Ly9jZG4uc2t5cGFjay5kZXYvc3ZnMnJvdWdoanNAMy4wLjE/bWluXCIpXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTExIiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoibWFrZVJvdWdoID0gKHN2Zywge1xuICBiYWNrZ3JvdW5kQ29sb3IgPSBcIndoaXRlXCIsXG4gIGZvbnRGYW1pbHkgPSBcImN1cnNpdmVcIixcbiAgZmlsbFN0eWxlID0gXCJoYWNodXJlXCIsXG4gIHJvdWdobmVzcyA9IDEuNSxcbiAgYm93aW5nID0gMSxcbiAgcmFuZG9taXplID0gdHJ1ZSxcbiAgcGVuY2lsRmlsdGVyID0gdHJ1ZVxufSA9IHt9KSA9PiB7XG4gIGNvbnN0IFMgPSBPYmplY3QuYXNzaWduKFxuICAgIG5ldyBzdmcycm91Z2guU3ZnMlJvdWdoanMoZG9jdW1lbnQuY3JlYXRlRWxlbWVudChcInN2Z1wiKSksXG4gICAge1xuICAgICAgc3ZnLFxuICAgICAgYmFja2dyb3VuZENvbG9yLFxuICAgICAgcGVuY2lsRmlsdGVyLFxuICAgICAgcmFuZG9taXplLFxuICAgICAgZm9udEZhbWlseSxcbiAgICAgIHJvdWdoQ29uZmlnOiB7IGJvd2luZywgcm91Z2huZXNzLCBmaWxsU3R5bGUgfVxuICAgIH1cbiAgKTtcbiAgUy5za2V0Y2goKTtcbiAgcmV0dXJuIFMub3V0cHV0RWxlbWVudDtcbn1cbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMTIiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJ2aWV3b2YgcXVhcnRvVGhlbWVJc0RhcmsgPSB7XG4gIGNvbnN0IHNwYW4gPSBodG1sYDxzcGFuIHN0eWxlPVwiZGlzcGxheTogbm9uZTtcIj48L3NwYW4+YDtcblxuICBmdW5jdGlvbiB1cGRhdGVUaGVtZSgpIHtcbiAgICBjb25zdCBpc0RhcmsgPSBkb2N1bWVudC5ib2R5LmNsYXNzTGlzdC5jb250YWlucyhcInF1YXJ0by1kYXJrXCIpO1xuICAgIHNwYW4udmFsdWUgPSBpc0Rhcms7XG4gICAgc3Bhbi5kaXNwYXRjaEV2ZW50KG5ldyBDdXN0b21FdmVudChcImlucHV0XCIpKTtcbiAgfVxuXG4gIC8vIEluaXRpYWwgY2hlY2tcbiAgdXBkYXRlVGhlbWUoKTtcblxuICAvLyBPYnNlcnZlciBsZXMgY2hhbmdlbWVudHMgZGUgY2xhc3NlIHN1ciA8Ym9keT5cbiAgY29uc3Qgb2JzZXJ2ZXIgPSBuZXcgTXV0YXRpb25PYnNlcnZlcigoKSA9PiB1cGRhdGVUaGVtZSgpKTtcblxuICBvYnNlcnZlci5vYnNlcnZlKGRvY3VtZW50LmJvZHksIHtcbiAgICBhdHRyaWJ1dGVzOiB0cnVlLFxuICAgIGF0dHJpYnV0ZUZpbHRlcjogW1wiY2xhc3NcIl1cbiAgfSk7XG5cbiAgLy8gTmV0dG95YWdlIHNpIGphbWFpcyBuw6ljZXNzYWlyZVxuICBzcGFuLnJlbW92ZSA9ICgpID0+IG9ic2VydmVyLmRpc2Nvbm5lY3QoKTtcblxuICByZXR1cm4gc3Bhbjtcbn1cblxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0xMyIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6ImltcG9ydCB7cG9pbnRlck1YLCByZW5kZXJNdWx0aXBsZVRleHQsIGN1c3RvbU92ZXJsYXBSZW5kZXJ9IGZyb20gXCJAb2JzZXJ2YWJsZWhxL3Bsb3QtcG9pbnRlci1kcml2ZW4tbWFya3NcIlxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0xNCIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6InBsb3RfcGxheWZhaXJfcmF3ID0ge1xuXG4gIC8vIHLDqGdsZSBkZSByZXNwb25zaXZlXG4gIGxldCBwbG90V2lkdGg7XG4gIGlmICh3aWR0aCA8IDc2OCkgeyAvLyBzZXVpbCBwb3VyIG1vYmlsZS90YWJsZXR0ZVxuICAgIHBsb3RXaWR0aCA9IHdpZHRoICogMC45NTsgLy8gcXVhc2kgdG91dGUgbGEgbGFyZ2V1clxuICB9IGVsc2Uge1xuICAgIHBsb3RXaWR0aCA9IHdpZHRoICogMC41OyAvLyBtb2l0acOpIGRlIGwnw6ljcmFuIHN1ciBncmFuZFxuICB9XG5cbiAgY29uc3QgcGxvdEhlaWdodCA9IHBsb3RXaWR0aCAqIDguNS81O1xuXG4gIGNvbnN0IHBsb3RfcGxheWZhaXJfcmF3ID0gUGxvdC5wbG90KHtcbiAgICB3aWR0aDogcGxvdFdpZHRoLFxuICAgIGhlaWdodDogcGxvdEhlaWdodCxcbiAgICBzdHlsZToge1xuICAgICAgYmFja2dyb3VuZENvbG9yOiAnI2ZiZTlkMycsXG4gICAgICBjb2xvcjogJ2JsYWNrJyxcbiAgICB9LFxuICAgIHg6IHsgbGFiZWw6IFwiQW5uw6llXCIsIGRvbWFpbjogW2QzLm1pbihkZiwgZCA9PiBkLlRJTUVfUEVSSU9EKSwgZDMubWF4KGRmLCBkID0+IGQuVElNRV9QRVJJT0QpXX0sXG4gICAgeToge1xuICAgICAgYXhpczogXCJyaWdodFwiLFxuICAgICAgbGFiZWw6IFwiUmF0aW8gZGV0dGUvUElCICglKVwiLFxuICAgIH0sXG4gICAgbWFya3M6IFtcbiAgICAgIFBsb3QuYXJlYVkoZGYsIHtcbiAgICAgICAgeDogXCJUSU1FX1BFUklPRFwiLFxuICAgICAgICB5MjogXCJPQlNfVkFMVUVfTklWRUFVXCIsXG4gICAgICAgIHkxOiBkID0+IGQzLm1pbihkZiwgZCA9PiBkLk9CU19WQUxVRV9OSVZFQVUpLFxuICAgICAgICBmaWxsOiBcIiNhOTk5N2FcIixcbiAgICAgICAgY3VydmU6IFwibGluZWFyXCIsXG4gICAgICAgIG9wYWNpdHk6IDAuOFxuICAgICAgfSksXG4gICAgICBQbG90LmxpbmUoZGYsIHtcbiAgICAgICAgeDogXCJUSU1FX1BFUklPRFwiLFxuICAgICAgICB5OiBcIk9CU19WQUxVRV9OSVZFQVVcIixcbiAgICAgICAgc3Ryb2tlOiBcImRhcmtyZWRcIixcbiAgICAgICAgc3Ryb2tlV2lkdGg6IDMuNSxcbiAgICAgICAgY3VydmU6IFwibGluZWFyXCIsXG4gICAgICAgIHRpcDogdHJ1ZSxcbiAgICAgICAgc3Ryb2tlT3BhY2l0eTogMC42XG4gICAgICB9KSxcbiAgICAgIFBsb3QuZ3JpZFkoeyBzdHJva2VPcGFjaXR5OiAwLjYgfSksXG4gICAgICBQbG90LmdyaWRYKHsgc3Ryb2tlT3BhY2l0eTogMC42LCBpbnRlcnZhbDogXCIxIHllYXJcIiB9KSxcblxuICAgICAgLy8gLS0tIMOpdsOobmVtZW50cyAtLS1cbiAgICAgIFBsb3QudGV4dChcbiAgICAgICAgW3sgVElNRV9QRVJJT0Q6IG5ldyBEYXRlKFwiMjAwOC0wMS0wMVwiKSwgT0JTX1ZBTFVFX05JVkVBVTogZDMubWF4KGRmLCBkID0+IGQuT0JTX1ZBTFVFX05JVkVBVSkgfV0sXG4gICAgICAgIHtcbiAgICAgICAgICB4OiAoZCkgPT4gZDMudGltZU1vbnRoLm9mZnNldChkLlRJTUVfUEVSSU9ELCAtNSksXG4gICAgICAgICAgeTogKGQpID0+IGQuT0JTX1ZBTFVFX05JVkVBVSAtIDIwLFxuICAgICAgICAgIHRleHQ6ICgpID0+IFwiQ3Jpc2UgZmluYW5jacOocmVcIixcbiAgICAgICAgICByb3RhdGU6IC05MCxcbiAgICAgICAgICBkeTogLTIwLFxuICAgICAgICAgIGZvbnRTaXplOiAxMixcbiAgICAgICAgICBmaWxsOiBcImJsYWNrXCIsXG4gICAgICAgICAgdGV4dEFuY2hvcjogXCJlbmRcIixcbiAgICAgICAgICBmb250V2VpZ2h0OiBcImJvbGRcIlxuICAgICAgICB9XG4gICAgICApLFxuICAgICAgUGxvdC50ZXh0KFxuICAgICAgICBbeyBUSU1FX1BFUklPRDogbmV3IERhdGUoXCIyMDIwLTAxLTAxXCIpLCBPQlNfVkFMVUVfTklWRUFVOiBkMy5tYXgoZGYsIGQgPT4gZC5PQlNfVkFMVUVfTklWRUFVKSB9XSxcbiAgICAgICAge1xuICAgICAgICAgIHg6IChkKSA9PiBkMy50aW1lTW9udGgub2Zmc2V0KGQuVElNRV9QRVJJT0QsIC01KSxcbiAgICAgICAgICB5OiAoZCkgPT4gZC5PQlNfVkFMVUVfTklWRUFVIC0gMjAsXG4gICAgICAgICAgdGV4dDogKCkgPT4gXCJDb3ZpZFwiLFxuICAgICAgICAgIHJvdGF0ZTogLTkwLFxuICAgICAgICAgIGR5OiAtMjAsXG4gICAgICAgICAgZm9udFNpemU6IDEyLFxuICAgICAgICAgIGZpbGw6IFwiYmxhY2tcIixcbiAgICAgICAgICB0ZXh0QW5jaG9yOiBcImVuZFwiLFxuICAgICAgICAgIGZvbnRXZWlnaHQ6IFwiYm9sZFwiXG4gICAgICAgIH1cbiAgICAgICksXG5cbiAgICAgIC8vIHRvbiBpbWFnZVxuICAgICAgUGxvdC5pbWFnZSh0ZW1wLCB7XG4gICAgICAgIHg6IFwieFwiLFxuICAgICAgICB5OiBcInlcIixcbiAgICAgICAgc3JjOiBcImh0dHBzOi8vbWluaW8ubGFiLnNzcGNsb3VkLmZyL2xnYWxpYW5hL2RhdGEvZGF0YXZpei9jaGFydF9uYXRpb25hbF9kZWJ0Mi5wbmdcIixcbiAgICAgICAgd2lkdGg6IDE2MCxcbiAgICAgICAgdGl0bGU6IFwiVGl0bGVcIlxuICAgICAgfSlcbiAgICBdXG4gIH0pO1xuXG4gIHJldHVybiBwbG90X3BsYXlmYWlyX3Jhd1xufVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0xNSIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6InZpZXdvZiB5ZWFyWm9vbSA9IHRpbWVSYW5nZShcbiAgbmV3IGQzLm1pbihkZiwgZCA9PiBkLlRJTUVfUEVSSU9EKSxcbiAgbmV3IGQzLm1heChkZiwgZCA9PiBkLlRJTUVfUEVSSU9EKSxcbiAge1xuICAgIGludGVydmFsOiBcInllYXJcIixcbiAgICB2YWx1ZTogW25ldyBkMy5taW4oZGYsIGQgPT4gZC5USU1FX1BFUklPRCksIG5ldyBkMy5tYXgoZGYsIGQgPT4gZC5USU1FX1BFUklPRCldXG4gIH1cbilcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoic2hpbnlJbnB1dCgncGxvdF9tb2Rlcm4nKSJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoic2hpbnlJbnB1dCgncXVhcnRvVGhlbWVJc0RhcmsnKSJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoic2hpbnlJbnB1dCgneWVhclpvb20nKSJ9XX0=
+</script>
+<script type="module">
+if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+window._ojs.paths.runtimeToDoc = "../..";
+window._ojs.paths.runtimeToRoot = "../..";
+window._ojs.paths.docToRoot = "";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/linogaliana\.github\.io\/playfair-viz-reproduction\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

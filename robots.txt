@@ -1,0 +1,1 @@
+Sitemap: https://linogaliana.github.io/playfair-viz-reproduction/sitemap.xml

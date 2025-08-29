@@ -3,10 +3,9 @@ title: "playfair-reproduction"
 echo: false
 ---
 
-Il est beaucoup question de dette publique actuellement. J'ai découvert dans le cours de Stanislas Dehaene au collège de France sur la [perception des graphiques](https://www.college-de-france.fr/fr/agenda/cours/la-perception-des-graphiques-un-nouvel-exemple-de-recyclage-neuronal/origine-et-evolution-des-graphiques) qu'une des premières représentations graphiques modernes, qu'on doit à Playfair (1787), représentait justement l'évolution de la dette (anglaise) au cours du temps. 
+Il est beaucoup question de dette publique actuellement. Il se trouve que j'ai récemment découvert dans le cours de Stanislas Dehaene au collège de France sur la [perception des graphiques {{< fa arrow-up-right-from-square >}}](https://www.college-de-france.fr/fr/agenda/cours/la-perception-des-graphiques-un-nouvel-exemple-de-recyclage-neuronal/origine-et-evolution-des-graphiques){target="_blank"} qu'une des premières représentations graphiques modernes, qu'on doit à **[William Playfair {{< fa arrow-up-right-from-square >}}](https://fr.wikipedia.org/wiki/William_Playfair){target="_blank"}** en 1787, représentait justement l'évolution de la dette (anglaise) au cours du temps. 
 
-J'avais donc envie de m'amuser à rejouer cette figure historique sur les données françaises. Et puis ensuite, tout de même, de faire une représentation qui bénéficie de presque 250 ans de recul sur la perception des graphiques et de la "vérité" (une notion qui elle-même mérite discussion) des données.
-
+J'avais donc envie de m'amuser à rejouer cette figure historique sur les données françaises récentes (détails sur celles-ci plus bas). Et puis ensuite, tout de même, de faire une représentation qui bénéficie de presque 250 ans de recul sur la perception des graphiques et permettant de mieux communiquer la "vérité" (une notion qui elle-même mérite discussion) des données. Les enjeux conceptuels et des précautions d'interprétation sont proposés plus bas. 
 
 
 ```{ojs}
@@ -66,7 +65,9 @@ J'avais donc envie de m'amuser à rejouer cette figure historique sur les donné
 
 ```
 
-Et voici une version un peu plus économe de fioritures:
+Parmi les principaux problèmes de la représentation ci-dessus, on peut noter l'axe à droite et le point de départ de l'axe des ordonnées. Sur ce dernier sujet, il est plus juste de partir de 0 qui fournit, en quelques sorte, un idéal (un Etat sans endettement) permettant d'évaluer plus justement les valeurs observées.
+
+On peut aussi tirer parti de l'interactivité du navigateur web pour rendre plus ergonomique la visualisation. Piur améliorer la contextualisation de ces statistiques, des annotations sur certaines périodes clés ne seraient pas inutiles. Mais comme elles peuvent alourdir la visualisation sans réflexion approfondie sur l'ergonomie de la figure, j'ai préféré ne pas en mettre.
 
 ```{ojs}
 html`
@@ -83,14 +84,20 @@ viewof plot_modern = Plot.plot({
   marginBottom: 38,
   marginRight: 130,
   style: "user-select: none; touch-action: none; max-width: 100%;",
-  title: html`<div style="font-family: var(--sans-serif); font-weight: 600;">${'Titre'}</div>`,
-
+  title: html`<div style="font-family: var(--sans-serif); font-weight: 600;">${'La dette des administrations publiques françaises'}</div>`,
+  caption: md`Cette figure représente la [dette au sens de Maastricht](https://www.insee.fr/fr/statistiques/8574703?sommaire=8574832#documentation) des administrations publiques françaises, rapportée au PIB. Les seuils de 60% (critère de convergence de Maastricht) et de 100% (dette égale au PIB) ont été rapportés.<br>Source: Insee, [comptes nationaux annuels](https://www.insee.fr/fr/statistiques/8574703?sommaire=8574832#documentation)`,
   x: { domain: yearZoom, grid: true, label: "Année" },
   y: {
     grid: true, domain: [0, d3.max(df, d => d.OBS_VALUE_NIVEAU)+10],
     label: "Ratio dette/PIB (%)"
     },
   marks: [
+
+    Plot.ruleY(
+      [60, 100],
+      {strokeDasharray: "4,2"}
+    ),
+
     // petit triangle indicateur
     Plot.dot(
       df,
@@ -108,10 +115,10 @@ viewof plot_modern = Plot.plot({
     Plot.lineY(df, {
       x: "TIME_PERIOD",
       y: "OBS_VALUE_NIVEAU",
-      stroke: "black",
+      stroke: "red",
       strokeWidth: 1,
       curve: "natural",
-      opacity: 0.25
+      opacity: 0.250
     }),
 
     // courbe principale "mise en avant"
@@ -128,6 +135,7 @@ viewof plot_modern = Plot.plot({
         markerStart: true
       })
     ),
+
 
     // annotation du nom de la série (fixe : "Dette")
     Plot.text(
@@ -161,14 +169,19 @@ viewof plot_modern = Plot.plot({
       })
     ),
 
-    Plot.lineY([70]),
-    Plot.lineY([100]),
   ]
 });
 
 ```
 
+## Données et définitions conceptuelles
 
+Ces graphiques s'appuient sur les comptes nationaux - une représentation synthétique de la structure de l'économie française - publiés par l'Insee. Le concept retenu est celui de la dette au sens de Maastricht. Son périmètre est ici celui des administrations publiques (les APU dans le jargon de la comptabilité nationale) qui prend en compte les passifs de l'État, des organismes divers d'administration centrale, des administrations publiques locales et des administrations de sécurité sociale. Le périmètre des engagements de l'Etat intégrés dans la définition de la dette au sens de Maastricht sont proposés sur le [site de l'Insee {{< fa arrow-up-right-from-square >}}](https://www.insee.fr/fr/statistiques/8574703?sommaire=8574832#consulter){target="_blank"}. 
+
+Ces données ont été récupérées par le biais de l'API Melodi de l'Insee qui vise à simplifier la récupération de certains jeux de données - notamment ceux issus de la comptabilité nationale - de l'Insee. Les données en question sont consultables sur [catalogue-donnees.insee.fr/fr/explorateur/DD_CNA_APU {{< fa arrow-up-right-from-square >}}](https://catalogue-donnees.insee.fr/fr/explorateur/DD_CNA_APU){target="_blank"}
+et récupérables sous forme de JSON depuis l'URL [https://api.insee.fr/melodi/data/DD_CNA_APU?REF_SECTOR=S13&STO=_DETNET_PPIB](https://api.insee.fr/melodi/data/DD_CNA_APU?REF_SECTOR=S13&STO=_DETNET_PPIB){target="_blank"}. 
+
+Le code {{< fa brands js-square >}} de préparation de données est disponible ci-dessous. L'ensemble du code pour produire les visualisations est disponible sur [{{< fa brands github >}} `linogaliana/playfair-viz-reproduction` {{< fa arrow-up-right-from-square >}}](https://github.com/linogaliana/playfair-viz-reproduction){target="_blank"}
 
 {{< include "_data.qmd" >}}
 
@@ -177,6 +190,4 @@ viewof plot_modern = Plot.plot({
 {{< include "_plot.qmd" >}}
 
 {{< include "_widgets.qmd" >}}
-
-
 

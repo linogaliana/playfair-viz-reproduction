@@ -1,77 +1,92 @@
 
 ```{ojs}
 //| output: false
-plot_playfair_raw = Plot.plot({
-  width: 350,
-  height: 500,
-  style: {
-    backgroundColor: '#fbe9d3',
-    color: 'black',
-  },
-  x: { label: "Année", domain: [d3.min(df, d => d.TIME_PERIOD), d3.max(df, d => d.TIME_PERIOD)]},
-  y: {
-    axis: "right",
-    label: "Ratio dette/PIB (%)",
-  },
-  marks: [
-    Plot.areaY(df, {
-      x: "TIME_PERIOD",
-      y2: "OBS_VALUE_NIVEAU",
-      y1: d => d3.min(df, d => d.OBS_VALUE_NIVEAU),
-      fill: "#91db84",
-      curve: "linear",
-      opacity: 0.8
-    }),
-    Plot.line(df, {
-      x: "TIME_PERIOD",
-      y: "OBS_VALUE_NIVEAU",
-      stroke: "darkred",
-      strokeWidth: 3.5,
-      curve: "linear",
-      tip: true
-    }),
-    Plot.gridY({ strokeOpacity: 0.6 }),
-    Plot.gridX({ strokeOpacity: 0.6, interval: "1 year" }),
+plot_playfair_raw = {
 
-    // --- évènements ---
-    Plot.text(
-      [{ TIME_PERIOD: new Date("2008-01-01"), OBS_VALUE_NIVEAU: d3.max(df, d => d.OBS_VALUE_NIVEAU) }],
-      {
-        x: (d) => d3.timeMonth.offset(d.TIME_PERIOD, -5),
-        y: (d) => d.OBS_VALUE_NIVEAU - 20,
-        text: () => "Crise financière",
-        rotate: -90,
-        dy: -20,
-        fontSize: 12,
-        fill: "black",
-        textAnchor: "end",
-        fontWeight: "bold"
-      }
-    ),
-    Plot.text(
-      [{ TIME_PERIOD: new Date("2020-01-01"), OBS_VALUE_NIVEAU: d3.max(df, d => d.OBS_VALUE_NIVEAU) }],
-      {
-        x: (d) => d3.timeMonth.offset(d.TIME_PERIOD, -5),
-        y: (d) => d.OBS_VALUE_NIVEAU - 20,
-        text: () => "Covid",
-        rotate: -90,
-        dy: -20,
-        fontSize: 12,
-        fill: "black",
-        textAnchor: "end",
-        fontWeight: "bold"
-      }
-    ),
+  // règle de responsive
+  let plotWidth;
+  if (width < 768) { // seuil pour mobile/tablette
+    plotWidth = width * 0.95; // quasi toute la largeur
+  } else {
+    plotWidth = width * 0.5; // moitié de l'écran sur grand
+  }
 
-    // ton image
-    Plot.image(temp, {
-      x: "x",
-      y: "y",
-      src: "https://minio.lab.sspcloud.fr/lgaliana/data/dataviz/chart_national_debt2.png",
-      width: 160,
-      title: "Title"
-    })
-  ]
-})
+  const plotHeight = plotWidth * 8.5/5;
 
+  const plot_playfair_raw = Plot.plot({
+    width: plotWidth,
+    height: plotHeight,
+    style: {
+      backgroundColor: '#fbe9d3',
+      color: 'black',
+    },
+    x: { label: "Année", domain: [d3.min(df, d => d.TIME_PERIOD), d3.max(df, d => d.TIME_PERIOD)]},
+    y: {
+      axis: "right",
+      label: "Ratio dette/PIB (%)",
+    },
+    marks: [
+      Plot.areaY(df, {
+        x: "TIME_PERIOD",
+        y2: "OBS_VALUE_NIVEAU",
+        y1: d => d3.min(df, d => d.OBS_VALUE_NIVEAU),
+        fill: "#a9997a",
+        curve: "linear",
+        opacity: 0.8
+      }),
+      Plot.line(df, {
+        x: "TIME_PERIOD",
+        y: "OBS_VALUE_NIVEAU",
+        stroke: "darkred",
+        strokeWidth: 3.5,
+        curve: "linear",
+        tip: true,
+        strokeOpacity: 0.6
+      }),
+      Plot.gridY({ strokeOpacity: 0.6 }),
+      Plot.gridX({ strokeOpacity: 0.6, interval: "1 year" }),
+
+      // --- évènements ---
+      Plot.text(
+        [{ TIME_PERIOD: new Date("2008-01-01"), OBS_VALUE_NIVEAU: d3.max(df, d => d.OBS_VALUE_NIVEAU) }],
+        {
+          x: (d) => d3.timeMonth.offset(d.TIME_PERIOD, -5),
+          y: (d) => d.OBS_VALUE_NIVEAU - 20,
+          text: () => "Crise financière",
+          rotate: -90,
+          dy: -20,
+          fontSize: 12,
+          fill: "black",
+          textAnchor: "end",
+          fontWeight: "bold"
+        }
+      ),
+      Plot.text(
+        [{ TIME_PERIOD: new Date("2020-01-01"), OBS_VALUE_NIVEAU: d3.max(df, d => d.OBS_VALUE_NIVEAU) }],
+        {
+          x: (d) => d3.timeMonth.offset(d.TIME_PERIOD, -5),
+          y: (d) => d.OBS_VALUE_NIVEAU - 20,
+          text: () => "Covid",
+          rotate: -90,
+          dy: -20,
+          fontSize: 12,
+          fill: "black",
+          textAnchor: "end",
+          fontWeight: "bold"
+        }
+      ),
+
+      // ton image
+      Plot.image(temp, {
+        x: "x",
+        y: "y",
+        src: "https://minio.lab.sspcloud.fr/lgaliana/data/dataviz/chart_national_debt2.png",
+        width: 160,
+        title: "Title"
+      })
+    ]
+  });
+
+  return plot_playfair_raw
+}
 ```

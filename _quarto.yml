@@ -10,7 +10,7 @@ website:
     search: false
     tools:
       - icon: github
-        href: https://github.com/linogaliana/dataviz-bike-price
+        href: https://github.com/linogaliana/playfair-viz-reproduction.git
         text: Code source sur GitHub
 
 format:

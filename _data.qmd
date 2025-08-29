@@ -6,6 +6,9 @@ filtered = df.filter(d =>
 ```
 
 ```{ojs}
+//| echo: true
+//| code-fold: true
+//| code-summary: "Voir le code (Javascript) de récupération des données"
 df = d3.json("https://api.insee.fr/melodi/data/DD_CNA_APU?REF_SECTOR=S13&STO=_DETNET_PPIB").then(data => {
   const flattened = data.observations.map(obs => {
     const dimensions = { ...obs.dimensions };
@@ -35,7 +38,7 @@ df = d3.json("https://api.insee.fr/melodi/data/DD_CNA_APU?REF_SECTOR=S13&STO=_DE
 
 ```{ojs}
 temp = Array({
-  url: "https://minio.lab.sspcloud.fr/lgaliana/dataviz/chart_national_debt2.png",
+  url: "https://minio.lab.sspcloud.fr/lgaliana/data/dataviz/chart_national_debt2.png",
   x: d3.timeMonth.offset( d3.min(filtered, d => d.TIME_PERIOD), -150),
   y: d3.max(filtered, d => d.OBS_VALUE_NIVEAU) - 8
 })

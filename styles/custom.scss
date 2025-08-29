@@ -1,0 +1,24 @@
+/*-- scss:defaults --*/
+// Base document colors
+$body-bg: #181818;
+$body-color: #ccc;
+$link-color: #75AADB;
+$navbar-bg: #181818;
+
+// Code blocks
+$code-block-bg-alpha: -.9;
+
+svg[class^="plot-"] {
+background-color: #181818 !important;
+color: white !important;
+};
+
+.toggle-ios {
+  color: white !important;   /* utilise la variable */
+}; 
+
+.label {
+  color: white !important;   /* applique aussi ici */
+};
+
+

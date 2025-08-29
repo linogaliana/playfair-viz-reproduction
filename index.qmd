@@ -3,123 +3,169 @@ title: "playfair-reproduction"
 echo: false
 ---
 
-On s'amuse à reproduire la figure de Playfair (1789)
+Il est beaucoup question de dette publique actuellement. J'ai découvert dans le cours de Stanislas Dehaene au collège de France sur la [perception des graphiques](https://www.college-de-france.fr/fr/agenda/cours/la-perception-des-graphiques-un-nouvel-exemple-de-recyclage-neuronal/origine-et-evolution-des-graphiques) qu'une des premières représentations graphiques modernes, qu'on doit à Playfair (1787), représentait justement l'évolution de la dette (anglaise) au cours du temps. 
+
+J'avais donc envie de m'amuser à rejouer cette figure historique sur les données françaises. Et puis ensuite, tout de même, de faire une représentation qui bénéficie de presque 250 ans de recul sur la perception des graphiques et de la "vérité" (une notion qui elle-même mérite discussion) des données.
 
 
-:::: {.columns}
-
-::: {.column width="50%"}
 
 ```{ojs}
-makeRough(
-  plot_playfair_raw, {randomize: false, bowing: 0, rougness: 0, backgroundColor: "#f9edb1", fillStyle: "solid", fontFamily: "Patrick Hand"}
-)
+{
+  // Crée le conteneur
+  const container = html`<div class="figures-playfair"></div>`;
+
+  // Petite fonction utilitaire pour (re)faire la mise en page
+  const mq = window.matchMedia("(min-width: 900px)");
+  function applyLayout() {
+    container.style.display = "grid";
+    container.style.gridTemplateColumns = mq.matches ? "1fr 1fr" : "1fr";
+    container.style.gap = "16px";
+    container.style.alignItems = "start";
+  }
+
+  // Construire les deux panneaux
+  const left = document.createElement("div");
+  left.appendChild(html`<h4>La dette française, à la Playfair</h4>`);
+  left.appendChild(
+    makeRough(
+      plot_playfair_raw,
+      { randomize: false, bowing: 0, roughness: 0, backgroundColor: "#fbe9d3", fillStyle: "solid", fontFamily: "Patrick Hand" }
+    )
+  );
+
+  const right = document.createElement("div");
+  right.appendChild(html`<h4>Version originale</h4>`);
+  const img = Object.assign(new Image(), { src: "playfair-national-debt.png" });
+  // Image responsive
+  img.style.maxWidth = "100%";
+  img.style.height = "auto";
+  right.appendChild(img);
+
+  container.append(left, right);
+
+  // Applique la mise en page initiale et écoute les changements
+  applyLayout();
+
+  // Compat ancien / nouveau navigateur
+  if (mq.addEventListener) mq.addEventListener("change", applyLayout);
+  else mq.addListener(applyLayout);
+
+  // Sécuriser avec un listener de resize (au cas où)
+  const onResize = () => applyLayout();
+  window.addEventListener("resize", onResize);
+
+  // Nettoyage si le DOM est détaché
+  container.addEventListener("DOMNodeRemoved", () => {
+    if (mq.removeEventListener) mq.removeEventListener("change", applyLayout);
+    else mq.removeListener(applyLayout);
+    window.removeEventListener("resize", onResize);
+  }, { once: true });
+
+  return container;
+}
+
 ```
 
-La version moderne sur données françaises
+Et voici une version un peu plus économe de fioritures:
 
-:::
-
-::: {.column width="50%"}
-
-![](playfair-national-debt.png){height="500"}
-
-La version originale
-
-:::
-
-::::
+```{ojs}
+html`
+${viewof yearZoom}
+${viewof plot_modern}
+` 
+```
 
 
 ```{ojs}
-Plot.plot({
-    width: 670,
-    height: 330,
-    marginBottom: 38,
-    marginRight: 130,
-    style: "user-select: none; touch-action: none; max-width: 100%;",
-    title: html`<div style="font-family: var(--sans-serif); font-weight: 600;">${'Titre'}</div>`,
-    color: {
-      domain: ["red"]
-    },
-    x: {
-      domain: yearZoom,
-      grid: true
-    },
-    y: {
-      grid: true
-    },
-    marks: [
-      Plot.dot(
-        df,
-        pointerMX({
-          symbol: "triangle",
-          x: "TIME_PERIOD",
-          frameAnchor: "top",
-          atrest: "maxX",
-          fill: "black",
-          rotate: 180
-        })
-      ),
+viewof plot_modern = Plot.plot({
+  width: 670,
+  height: 330,
+  marginBottom: 38,
+  marginRight: 130,
+  style: "user-select: none; touch-action: none; max-width: 100%;",
+  title: html`<div style="font-family: var(--sans-serif); font-weight: 600;">${'Titre'}</div>`,
 
-      Plot.lineY(df, {
+  x: { domain: yearZoom, grid: true, label: "Année" },
+  y: {
+    grid: true, domain: [0, d3.max(df, d => d.OBS_VALUE_NIVEAU)+10],
+    label: "Ratio dette/PIB (%)"
+    },
+  marks: [
+    // petit triangle indicateur
+    Plot.dot(
+      df,
+      pointerMX({
+        symbol: "triangle",
+        x: "TIME_PERIOD",
+        frameAnchor: "top",
+        atrest: "maxX",
+        fill: "#c81025",
+        rotate: 180
+      })
+    ),
+
+    // courbe fine en arrière-plan
+    Plot.lineY(df, {
+      x: "TIME_PERIOD",
+      y: "OBS_VALUE_NIVEAU",
+      stroke: "black",
+      strokeWidth: 1,
+      curve: "natural",
+      opacity: 0.25
+    }),
+
+    // courbe principale "mise en avant"
+    Plot.lineY(
+      df,
+      pointerMX({
         x: "TIME_PERIOD",
         y: "OBS_VALUE_NIVEAU",
-        stroke: "red",
-        strokeWidth: 1,
+        atrest: "maxX",
+        selector: "before",
+        stroke: "#c81025",
         curve: "natural",
-        opacity: 0.25
-      }),
+        strokeWidth: 3,
+        markerStart: true
+      })
+    ),
 
-      Plot.lineY(
-        df,
-        pointerMX({
-          x: "TIME_PERIOD",
-          y: "OBS_VALUE_NIVEAU",
-          atrest: "maxX",
-          selector: "before",
-          z: "variable",
-          stroke: "variable",
-          curve: "natural",
-          strokeWidth: 3,
-          markerStart: true,
-        })
-      ),
+    // annotation du nom de la série (fixe : "Dette")
+    Plot.text(
+      df,
+      pointerMX({
+        x: "TIME_PERIOD",
+        y: "OBS_VALUE_NIVEAU",
+        atrest: "maxX",
+        selector: "eq",
+        fontWeight: "bold",
+        text: d => d.OBS_VALUE_NIVEAU.toFixed(1) + " %",
+        fontSize: 14,
+        textAnchor: "end",
+        dx: 50,
+        stroke: "white",
+        fill: "#c81025"
+      })
+    ),
 
-      Plot.text(
-        df,
-        pointerMX(
-          renderMultipleText({
-            x: "TIME_PERIOD",
-            y: "OBS_VALUE_NIVEAU",
-            atrest: "maxX",
-            channels: { z: "variable" },
-            fill: "variable",
-            selector: "eq",
-            fontWeight: "bold",
-            fontSize: 14,
-            text: (d) => "dette",
-            textAnchor: "end",
-            stroke: "white",
-            dx: 50,
-            render: customOverlapRender()
-          })
-        )
-      ),
+    // annotation de valeur dynamique
+    Plot.text(
+      df,
+      pointerMX({
+        x: "TIME_PERIOD",
+        y: "OBS_VALUE_NIVEAU",
+        atrest: "maxX",
+        text: (d) => d.TIME_PERIOD.toLocaleString(undefined, {year: "numeric"}),
+        fill: "currentColor",
+        frameAnchor: "top",
+        dy: -15
+      })
+    ),
 
-      Plot.text(
-        df,
-        pointerMX({
-          x: "TIME_PERIOD",
-          atrest: "maxX",
-          text: "ddd",
-          fill: "currentColor",
-          frameAnchor: "top",
-          dy: -15
-        })
-      )
-    ]
-  });
+    Plot.lineY([70]),
+    Plot.lineY([100]),
+  ]
+});
+
 ```
 
 

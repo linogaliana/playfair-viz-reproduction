@@ -103,10 +103,6 @@ svg2rough = import("https://cdn.skypack.dev/svg2roughjs@3.0.1?min")
 ```
 
 ```{ojs}
-import {timeRange} from "@linogaliana/dataviz-bike-notebook"
-```
-
-```{ojs}
 makeRough = (svg, {
   backgroundColor = "white",
   fontFamily = "cursive",

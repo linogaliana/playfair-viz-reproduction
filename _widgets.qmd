@@ -4,8 +4,8 @@ viewof yearZoom = timeRange(
   new d3.min(df, d => d.TIME_PERIOD),
   new d3.max(df, d => d.TIME_PERIOD),
   {
-    interval: "month",
-    value: [new Date("2018-10-01"), new d3.max(df, d => d.TIME_PERIOD)]
+    interval: "year",
+    value: [new d3.min(df, d => d.TIME_PERIOD), new d3.max(df, d => d.TIME_PERIOD)]
   }
 )
 ```

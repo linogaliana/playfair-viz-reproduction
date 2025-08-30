@@ -26,12 +26,10 @@ J'avais donc envie de m'amuser à rejouer cette figure historique sur les donné
   // Construire les deux panneaux
   const left = document.createElement("div");
   left.appendChild(html`<h4>La dette française, à la Playfair</h4>`);
-  left.appendChild(
-    makeRough(
-      plot_playfair_raw,
-      { randomize: false, bowing: 0, roughness: 0, backgroundColor: "#fbe9d3", fillStyle: "solid", fontFamily: "Patrick Hand" }
-    )
-  );
+  const img_playfair = Object.assign(new Image(), { src: "https://minio.lab.sspcloud.fr/lgaliana/data/dataviz/playfair_reproduction.png" });
+  img_playfair.style.maxWidth = "100%";
+  img_playfair.style.height = "auto";
+  left.appendChild(img_playfair);
 
   const right = document.createElement("div");
   right.appendChild(html`<h4>Version originale</h4>`);
@@ -88,7 +86,7 @@ viewof plot_modern = Plot.plot({
   marginRight: 130,
   style: "user-select: none; touch-action: none; max-width: 100%;",
   title: html`<div style="font-family: var(--sans-serif); font-weight: 600;">${'La dette des administrations publiques françaises'}</div>`,
-  caption: md`Cette figure représente la [dette au sens de Maastricht](https://www.insee.fr/fr/statistiques/8574703?sommaire=8574832#documentation) des administrations publiques françaises, rapportée au PIB. Les seuils de 60% (critère de convergence de Maastricht) et de 100% (dette égale au PIB) ont été rapportés.<br>Source: Insee, [comptes nationaux annuels](https://www.insee.fr/fr/statistiques/8574703?sommaire=8574832#documentation)`,
+  caption: md`Cette figure représente la [dette au sens de Maastricht](https://www.insee.fr/fr/statistiques/8574703?sommaire=8574832#documentation) des administrations publiques françaises, rapportée au PIB. Les seuils de 60% (critère de convergence de Maastricht) et de 100% (dette égale au PIB) ont été rapportés.<br>Source: Insee, [comptes nationaux annuels](https://www.insee.fr/fr/statistiques/8574703?sommaire=8574832#documentation).`,
   x: { domain: yearZoom, grid: true, label: "Année" },
   y: {
     grid: true, domain: [0, d3.max(df, d => d.OBS_VALUE_NIVEAU)+10],

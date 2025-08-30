@@ -26,7 +26,14 @@ J'avais donc envie de m'amuser à rejouer cette figure historique sur les donné
   // Construire les deux panneaux
   const left = document.createElement("div");
   left.appendChild(html`<h4>La dette française, à la Playfair</h4>`);
-  const img_playfair = Object.assign(new Image(), { src: "https://minio.lab.sspcloud.fr/lgaliana/data/dataviz/playfair_reproduction.png" });
+  //  left.appendChild(
+  //  makeRough(
+  //    plot_playfair_raw,
+  //    { randomize: false, bowing: 0, roughness: 0, backgroundColor: "#fbe9d3", fillStyle: "solid", fontFamily: "Patrick Hand" }
+  //  )
+  //);
+
+  const img_playfair = Object.assign(new Image(), { src: "https://minio.lab.sspcloud.fr/lgaliana/data/dataviz/chart_national_debt_reproduction.png" });
   img_playfair.style.maxWidth = "100%";
   img_playfair.style.height = "auto";
   left.appendChild(img_playfair);
@@ -182,7 +189,7 @@ viewof plot_modern = Plot.plot({
 Ces graphiques s'appuient sur les comptes nationaux - une représentation synthétique de la structure de l'économie française - publiés par l'Insee. Le concept retenu est celui de la dette au sens de Maastricht. Son périmètre est ici celui des administrations publiques (les APU dans le jargon de la comptabilité nationale) qui prend en compte les passifs de l'État, des organismes divers d'administration centrale, des administrations publiques locales et des administrations de sécurité sociale. Le périmètre des engagements de l'Etat intégrés dans la définition de la dette au sens de Maastricht est proposé sur le [site de l'Insee {{< fa arrow-up-right-from-square >}}](https://www.insee.fr/fr/statistiques/8574703?sommaire=8574832#consulter){target="_blank"}. 
 
 Ces données ont été récupérées par le biais de l'API Melodi de l'Insee qui vise à simplifier la récupération de certains jeux de données - notamment ceux issus de la comptabilité nationale - de l'Insee. Les données en question sont consultables sur [catalogue-donnees.insee.fr/fr/explorateur/DD_CNA_APU {{< fa arrow-up-right-from-square >}}](https://catalogue-donnees.insee.fr/fr/explorateur/DD_CNA_APU){target="_blank"}
-et récupérables sous forme de JSON depuis l'URL [https://api.insee.fr/melodi/data/DD_CNA_APU?REF_SECTOR=S13&STO=_DETNET_PPIB](https://api.insee.fr/melodi/data/DD_CNA_APU?REF_SECTOR=S13&STO=_DETNET_PPIB){target="_blank"}. 
+et récupérables sous forme de JSON depuis l'URL [https://api.insee.fr/melodi/data/DD_CNA_APU?REF_SECTOR=S13&STO=_GD_PPIB](https://api.insee.fr/melodi/data/DD_CNA_APU?REF_SECTOR=S13&STO=_GD_PPIB){target="_blank"}. 
 
 Le code {{< fa brands js-square >}} de préparation de données est disponible ci-dessous. L'ensemble du code pour produire les visualisations est disponible sur [{{< fa brands github >}} `linogaliana/playfair-viz-reproduction` {{< fa arrow-up-right-from-square >}}](https://github.com/linogaliana/playfair-viz-reproduction){target="_blank"}
 

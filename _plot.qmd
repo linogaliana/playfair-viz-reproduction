@@ -81,7 +81,7 @@ plot_playfair_raw = {
         x: "x",
         y: "y",
         src: "https://minio.lab.sspcloud.fr/lgaliana/data/dataviz/chart_national_debt2.png",
-        width: 160,
+        width: 200,
         title: "Title"
       })
     ]

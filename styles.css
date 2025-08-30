@@ -14,11 +14,17 @@
     }
   }
 
-g.text-container text {
-    fill: black !important;
-}
+  g.text-container text { fill:#000 !important; }
 
-g[filter="url(#pencilTextureFilter)"] path[stroke*="255, 255, 255"] {
-    stroke: rgba(0,0,0,0.2) !important;
-}
+  /* Désactive le filtre uniquement pour les groupes qui CONTIENNENT
+     un path de grille (stroke exact = rgba(0, 0, 0, 0.6)) */
+  g:has(> path[stroke="rgba(0, 0, 0, 0.6)"]) {
+    filter: none !important;
+  }
+
+  /* Optionnel : lignes plus nettes en raster */
+  g:has(> path[stroke="rgba(0, 0, 0, 0.6)"]) > path {
+    shape-rendering: crispEdges;
+  }
+
 
